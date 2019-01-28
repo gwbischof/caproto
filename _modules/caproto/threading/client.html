@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.threading.client &mdash; caproto 0.2.3+39.g7b688ac documentation</title>
+  <title>caproto.threading.client &mdash; caproto 0.2.3+78.ge3ef9fc documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.2.3+39.g7b688ac
+                0.2.3+78.ge3ef9fc
               </div>
             
           
@@ -239,7 +239,6 @@
         <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="n">timeout</span>
         <span class="k">with</span> <span class="n">pv</span><span class="o">.</span><span class="n">_in_use</span><span class="p">:</span>
-            <span class="n">pv</span><span class="o">.</span><span class="n">_usages</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="c1"># If needed, reconnect. Do this inside the lock so that we don&#39;t</span>
             <span class="c1"># try to do this twice. (No other threads that need this lock</span>
             <span class="c1"># can proceed until the connection is ready anyway!)</span>
@@ -259,6 +258,11 @@
                     <span class="n">cm</span><span class="o">.</span><span class="n">channels</span><span class="p">[</span><span class="n">cid</span><span class="p">]</span> <span class="o">=</span> <span class="n">chan</span>
                     <span class="n">cm</span><span class="o">.</span><span class="n">pvs</span><span class="p">[</span><span class="n">cid</span><span class="p">]</span> <span class="o">=</span> <span class="n">pv</span>
                     <span class="n">pv</span><span class="o">.</span><span class="n">circuit_manager</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">chan</span><span class="o">.</span><span class="n">create</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># increment the usage at the very end in case anything</span>
+            <span class="c1"># goes wrong in the block of code above this.</span>
+            <span class="n">pv</span><span class="o">.</span><span class="n">_usages</span> <span class="o">+=</span> <span class="mi">1</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CIRCUIT_DEATH_ATTEMPTS</span><span class="p">):</span>
                 <span class="c1"># On each iteration, subtract the time we already spent on any</span>
@@ -273,7 +277,7 @@
                 <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">timeout</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timeout</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span> <span class="o">=</span> <span class="kc">False</span>
+
                 <span class="n">cm</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">circuit_manager</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -449,18 +453,19 @@
                     <span class="n">bytes_available</span> <span class="o">=</span> <span class="n">socket_bytes_available</span><span class="p">(</span>
                         <span class="n">sock</span><span class="p">,</span> <span class="n">available_buffer</span><span class="o">=</span><span class="n">avail_buf</span><span class="p">)</span>
                     <span class="n">bytes_recv</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">bytes_available</span><span class="p">)</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;got bytes for me&quot;</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">ex</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
                         <span class="c1"># register as a disconnection</span>
-                        <span class="c1"># logger.error(&#39;Removing %s due to %s (%s)&#39;, obj, ex,</span>
-                        <span class="c1">#              ex.errno)</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Removing </span><span class="si">%s</span><span class="s1"> due to </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span>
+                                      <span class="n">ex</span><span class="o">.</span><span class="n">errno</span><span class="p">)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">remove_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
                     <span class="k">continue</span>
 
                 <span class="c1"># Let objects handle disconnection by returning a failure here</span>
                 <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">received</span><span class="p">(</span><span class="n">bytes_recv</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ca</span><span class="o">.</span><span class="n">DISCONNECTED</span><span class="p">:</span>
-                    <span class="c1"># self.log.debug(&#39;Removing %s = %s due to receive failure&#39;,</span>
-                    <span class="c1">#              sock, obj)</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Removing </span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="s1"> due to receive failure&#39;</span><span class="p">,</span>
+                                  <span class="n">sock</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">remove_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
 
                     <span class="c1"># TODO: consider adding specific DISCONNECTED instead of b&#39;&#39;</span>
@@ -1136,22 +1141,19 @@
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">pv_cache_lock</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">pv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvs</span><span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">priority</span><span class="p">)]</span>
-                    <span class="n">new_instance</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                     <span class="n">pv</span> <span class="o">=</span> <span class="n">PV</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">connection_state_callback</span><span class="p">,</span>
                             <span class="n">access_rights_callback</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
                     <span class="n">names_to_search</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">pvs</span><span class="p">[(</span><span class="n">name</span><span class="p">,</span> <span class="n">priority</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pv</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">pvs_needing_circuits</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span>
-                    <span class="n">new_instance</span> <span class="o">=</span> <span class="kc">True</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">new_instance</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">connection_state_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">pv</span><span class="o">.</span><span class="n">connection_state_callback</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span>
-                        <span class="n">connection_state_callback</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">access_rights_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">pv</span><span class="o">.</span><span class="n">access_rights_callback</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span>
-                        <span class="n">access_rights_callback</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">connection_state_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pv</span><span class="o">.</span><span class="n">connection_state_callback</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span>
+                    <span class="n">connection_state_callback</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">access_rights_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pv</span><span class="o">.</span><span class="n">access_rights_callback</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span>
+                    <span class="n">access_rights_callback</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">pvs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span>
 
@@ -1501,11 +1503,11 @@
             <span class="n">deadline</span> <span class="o">=</span> <span class="n">ioid_info</span><span class="p">[</span><span class="s1">&#39;deadline&#39;</span><span class="p">]</span>
             <span class="n">pv</span> <span class="o">=</span> <span class="n">ioid_info</span><span class="p">[</span><span class="s1">&#39;pv&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">deadline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">deadline</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Ignoring late response with ioid=</span><span class="si">%d</span><span class="s2"> regarding &quot;</span>
-                              <span class="s2">&quot;PV named </span><span class="si">%s</span><span class="s2"> because &quot;</span>
-                              <span class="s2">&quot;it arrived </span><span class="si">%.3f</span><span class="s2"> seconds after the deadline &quot;</span>
-                              <span class="s2">&quot;specified by the timeout.&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">.</span><span class="n">ioid</span><span class="p">,</span>
-                              <span class="n">pv</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">deadline</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Ignoring late response with ioid=</span><span class="si">%d</span><span class="s2"> regarding &quot;</span>
+                                 <span class="s2">&quot;PV named </span><span class="si">%s</span><span class="s2"> because &quot;</span>
+                                 <span class="s2">&quot;it arrived </span><span class="si">%.3f</span><span class="s2"> seconds after the deadline &quot;</span>
+                                 <span class="s2">&quot;specified by the timeout.&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">.</span><span class="n">ioid</span><span class="p">,</span>
+                                 <span class="n">pv</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">deadline</span><span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="n">pv</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2">: </span><span class="si">%r</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pv</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
@@ -1666,11 +1668,11 @@
 
         <span class="k">if</span> <span class="n">connection_state_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">connection_state_callback</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span>
-                <span class="n">connection_state_callback</span><span class="p">)</span>
+                <span class="n">connection_state_callback</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">access_rights_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">access_rights_callback</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span>
-                <span class="n">access_rights_callback</span><span class="p">)</span>
+                <span class="n">access_rights_callback</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_circuit_manager</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2054,8 +2056,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pv</span> <span class="o">=</span> <span class="n">pv</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_id</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">callback_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_call_values</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">removed</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_callback</span><span class="p">(</span><span class="n">cb_id</span><span class="p">)</span>  <span class="c1"># defined below inside the lock</span>
@@ -2070,6 +2073,11 @@
             <span class="n">cb_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_id</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_callback_id</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">cb_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
+
+        <span class="k">if</span> <span class="n">run</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_call_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_lock</span><span class="p">:</span>
+                <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_call_values</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cb_id</span>
 
     <span class="k">def</span> <span class="nf">remove_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
@@ -2084,6 +2092,7 @@
         <span class="n">to_remove</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback_lock</span><span class="p">:</span>
             <span class="n">callbacks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_last_call_values</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">cb_id</span><span class="p">,</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">callbacks</span><span class="p">:</span>
             <span class="n">callback</span> <span class="o">=</span> <span class="n">ref</span><span class="p">()</span>
