@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.server.records &mdash; caproto 0.2.3+82.gd2d651d documentation</title>
+  <title>caproto.server.records &mdash; caproto 0.2.3+84.gdc5b3d3 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.2.3+82.gd2d651d
+                0.2.3+84.gdc5b3d3
               </div>
             
           
@@ -4356,6 +4356,10 @@
         <span class="n">dtype</span><span class="o">=</span><span class="n">ChannelType</span><span class="o">.</span><span class="n">LONG</span><span class="p">,</span>
         <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;User Low Limit Switch&#39;</span><span class="p">,</span>
         <span class="n">read_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">user_offset</span> <span class="o">=</span> <span class="n">pvproperty</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;OFF&#39;</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">ChannelType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span>
+        <span class="n">doc</span><span class="o">=</span><span class="s1">&#39;User Offset (EGU)&#39;</span><span class="p">)</span>
     <span class="n">user_readback_value</span> <span class="o">=</span> <span class="n">pvproperty</span><span class="p">(</span>
         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;RBV&#39;</span><span class="p">,</span>
         <span class="n">dtype</span><span class="o">=</span><span class="n">ChannelType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span>
