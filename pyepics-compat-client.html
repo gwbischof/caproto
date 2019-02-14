@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Pyepics-Compatible Client &mdash; caproto 0.2.3+84.gdc5b3d3 documentation</title>
+  <title>Pyepics-Compatible Client &mdash; caproto 0.2.3+89.gce1c542 documentation</title>
   
 
   
@@ -17,34 +17,36 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Asynchronous Clients" href="async-clients.html" />
     <link rel="prev" title="Threading Client" href="threading-client.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -58,7 +60,7 @@
             
             
               <div class="version">
-                0.2.3+84.gdc5b3d3
+                0.2.3+89.gce1c542
               </div>
             
           
@@ -252,10 +254,10 @@ Get and put to <code class="docutils literal notranslate"><span class="pre">rand
 <span class="gh">Out[11]: </span><span class="go">0</span>
 
 <span class="gp">In [12]: </span><span class="kn">import</span> <span class="nn">time</span><span class="p">;</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># give some time for responses to come in</span>
-<span class="go">           received value 0.6503589259977465</span>
-<span class="go">received value 1.405943392100494</span>
-<span class="go">received value 1.2462294967405048</span>
-<span class="go">received value 1.0298265895943528</span>
+<span class="go">           received value 0.4911493850017623</span>
+<span class="go">received value 0.11590966478521025</span>
+<span class="go">received value 0.05023573109502699</span>
+<span class="go">received value -0.6852703654497774</span>
 
 <span class="gp">In [13]: </span><span class="n">x_pv</span><span class="o">.</span><span class="n">clear_callbacks</span><span class="p">()</span>
 </pre></div>
@@ -263,7 +265,7 @@ Get and put to <code class="docutils literal notranslate"><span class="pre">rand
 <p>The underlying caproto PV and Context objects from caproto’s main
 <a class="reference internal" href="threading-client.html"><span class="doc">Threading Client</span></a>. are accessible:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">pv</span><span class="o">.</span><span class="n">_caproto_pv</span>
-<span class="gh">Out[14]: </span><span class="go">&lt;PV name=&#39;random_walk:dt&#39; priority=0 address=(&#39;127.0.0.1&#39;, 64277), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="gh">Out[14]: </span><span class="go">&lt;PV name=&#39;random_walk:dt&#39; priority=0 address=(&#39;127.0.0.1&#39;, 50997), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 
 <span class="gp">In [15]: </span><span class="n">pv</span><span class="o">.</span><span class="n">_caproto_pv</span><span class="o">.</span><span class="n">context</span>
 <span class="go">                                                                                                                                            Out[15]: &lt;Context searches_pending=0 circuits=1 pvs=2 idle=0&gt;</span>
@@ -285,7 +287,7 @@ caproto’s test suite is more comprehensive.</p>
         <a href="async-clients.html" class="btn btn-neutral float-right" title="Asynchronous Clients" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="threading-client.html" class="btn btn-neutral" title="Threading Client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="threading-client.html" class="btn btn-neutral float-left" title="Threading Client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -311,26 +313,16 @@ caproto’s test suite is more comprehensive.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
