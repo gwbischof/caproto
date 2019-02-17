@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.threading.client &mdash; caproto 0.2.3+92.gc63bbe3 documentation</title>
+  <title>caproto.threading.client &mdash; caproto 0.2.3+96.ga0fa881 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+92.gc63bbe3
+                0.2.3+96.ga0fa881
               </div>
             
           
@@ -589,6 +589,8 @@
     <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">udp_sock</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">remove_socket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">udp_sock</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">udp_sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">udp_sock</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_close_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -1323,7 +1325,7 @@
                 <span class="k">if</span> <span class="n">circuit</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Disconnecting circuit </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
                                    <span class="n">idx</span><span class="p">,</span> <span class="n">total_circuits</span><span class="p">,</span> <span class="n">circuit</span><span class="p">)</span>
-                    <span class="n">circuit</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+                    <span class="n">circuit</span><span class="o">.</span><span class="n">_disconnected</span><span class="p">(</span><span class="n">reconnect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                     <span class="n">disconnected</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">if</span> <span class="n">disconnected</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;All circuits disconnected&#39;</span><span class="p">)</span>
@@ -1563,7 +1565,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;other command </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_disconnected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_disconnected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">reconnect</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="c1"># Ensure that this method is idempotent.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
             <span class="k">return</span>
@@ -1598,16 +1600,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="o">.</span><span class="n">remove_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">sock</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
-                <span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
                 <span class="k">pass</span>
 
-        <span class="c1"># Kick off attempt to reconnect all PVs via fresh circuit(s).</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Kicking off reconnection attempts for </span><span class="si">%d</span><span class="s1"> PVs &#39;</span>
-                       <span class="s1">&#39;disconnected from </span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1">....&#39;</span><span class="p">,</span>
-                       <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">),</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">reconnect</span><span class="p">(((</span><span class="n">chan</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">chan</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
-                                <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">reconnect</span><span class="p">:</span>
+            <span class="c1"># Kick off attempt to reconnect all PVs via fresh circuit(s).</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Kicking off reconnection attempts for </span><span class="si">%d</span><span class="s1"> PVs &#39;</span>
+                           <span class="s1">&#39;disconnected from </span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1">....&#39;</span><span class="p">,</span>
+                           <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">),</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">reconnect</span><span class="p">(((</span><span class="n">chan</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">chan</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+                                    <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Not attempting reconnection&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Shutting down ThreadPoolExecutor for user callbacks&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_callback_executor</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
@@ -1617,16 +1623,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="n">sock</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="p">,</span> <span class="kc">None</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">sock</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-            <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Circuit manager disconnected by user&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_disconnected</span><span class="p">(</span><span class="n">reconnect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span></div>
 
