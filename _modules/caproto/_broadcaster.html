@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto._broadcaster &mdash; caproto 0.2.3+98.g8e3a6c1 documentation</title>
+  <title>caproto._broadcaster &mdash; caproto 0.2.3+109.g0126ace documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+98.g8e3a6c1
+                0.2.3+109.g0126ace
               </div>
             
           
@@ -174,12 +174,12 @@
 <span></span><span class="c1"># This module contains only the Broadcaster object, encapsulating the state of</span>
 <span class="c1"># one Channel Access UDP connection, intended to be used as a companion to a</span>
 <span class="c1"># UDP socket provided by a client or server implementation.</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
 
 <span class="kn">from</span> <span class="nn">._constants</span> <span class="k">import</span> <span class="p">(</span><span class="n">DEFAULT_PROTOCOL_VERSION</span><span class="p">,</span> <span class="n">MAX_ID</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">._utils</span> <span class="k">import</span> <span class="p">(</span><span class="n">CLIENT</span><span class="p">,</span> <span class="n">SERVER</span><span class="p">,</span> <span class="n">CaprotoValueError</span><span class="p">,</span>
-                     <span class="n">RemoteProtocolError</span><span class="p">)</span>
+                     <span class="n">RemoteProtocolError</span><span class="p">,</span> <span class="n">ThreadsafeCounter</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">._state</span> <span class="k">import</span> <span class="n">get_exception</span>
 <span class="kn">from</span> <span class="nn">._commands</span> <span class="k">import</span> <span class="p">(</span><span class="n">RepeaterConfirmResponse</span><span class="p">,</span> <span class="n">RepeaterRegisterRequest</span><span class="p">,</span>
                         <span class="n">SearchRequest</span><span class="p">,</span> <span class="n">SearchResponse</span><span class="p">,</span> <span class="n">VersionRequest</span><span class="p">,</span>
@@ -220,7 +220,10 @@
         <span class="c1"># track for the Broadcaster. We don&#39;t need a full state machine, just</span>
         <span class="c1"># one flag to check whether we have yet registered with a repeater.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_registered</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_search_id_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_search_id_counter</span> <span class="o">=</span> <span class="n">ThreadsafeCounter</span><span class="p">(</span>
+            <span class="n">initial_value</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">MAX_ID</span><span class="p">),</span>
+            <span class="n">dont_clash_with</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;caproto.bcast&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Broadcaster.send"><a class="viewcode-back" href="../../api.html#caproto.Broadcaster.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">commands</span><span class="p">):</span>
@@ -325,14 +328,7 @@
 
 <div class="viewcode-block" id="Broadcaster.new_search_id"><a class="viewcode-back" href="../../api.html#caproto.Broadcaster.new_search_id">[docs]</a>    <span class="k">def</span> <span class="nf">new_search_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Return the next sequential unused id. Wrap back to 0 on overflow.</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_id_counter</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">MAX_ID</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_search_id_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">return</span> <span class="n">i</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_id_counter</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Broadcaster.search"><a class="viewcode-back" href="../../api.html#caproto.Broadcaster.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">cid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

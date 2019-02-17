@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto._circuit &mdash; caproto 0.2.3+98.g8e3a6c1 documentation</title>
+  <title>caproto._circuit &mdash; caproto 0.2.3+109.g0126ace documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+98.g8e3a6c1
+                0.2.3+109.g0126ace
               </div>
             
           
@@ -179,7 +179,6 @@
 <span class="c1"># to that Channel. A ClientChannel provides convenience methods for composing</span>
 <span class="c1"># Requests; a ServerChannel provides convenience methods for composing</span>
 <span class="c1"># Responses.</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="k">import</span> <span class="n">Iterable</span>
@@ -201,9 +200,9 @@
                      <span class="n">CaprotoValueError</span><span class="p">,</span> <span class="n">CaprotoRuntimeError</span><span class="p">,</span> <span class="n">CaprotoError</span><span class="p">,</span>
                      <span class="n">CaprotoTypeError</span><span class="p">,</span>
                      <span class="n">parse_channel_filter</span><span class="p">,</span> <span class="n">parse_record_field</span><span class="p">,</span>
-                     <span class="n">ChannelFilter</span><span class="p">)</span>
+                     <span class="n">ChannelFilter</span><span class="p">,</span> <span class="n">ThreadsafeCounter</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">._dbr</span> <span class="k">import</span> <span class="p">(</span><span class="n">ChannelType</span><span class="p">,</span> <span class="n">SubscriptionType</span><span class="p">,</span> <span class="n">field_types</span><span class="p">,</span> <span class="n">native_type</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">._constants</span> <span class="k">import</span> <span class="p">(</span><span class="n">DEFAULT_PROTOCOL_VERSION</span><span class="p">,</span> <span class="n">MAX_ID</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">._constants</span> <span class="k">import</span> <span class="n">DEFAULT_PROTOCOL_VERSION</span>
 <span class="kn">from</span> <span class="nn">._status</span> <span class="k">import</span> <span class="n">CAStatus</span>
 
 
@@ -240,15 +239,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">address</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channels</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map cid to Channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channels_sid</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map sid to Channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">CircuitState</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">channels_sid</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map sid to Channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map ioid to Channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_add_commands</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map subscriptionid to EventAdd command</span>
         <span class="c1"># There are only used by the convenience methods, to auto-generate ids.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_channel_id_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ioid_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_sub_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">our_role</span> <span class="ow">is</span> <span class="n">CLIENT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channel_id_counter</span> <span class="o">=</span> <span class="n">ThreadsafeCounter</span><span class="p">(</span>
+                <span class="n">dont_clash_with</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channels</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channel_id_counter</span> <span class="o">=</span> <span class="n">ThreadsafeCounter</span><span class="p">(</span>
+                <span class="n">dont_clash_with</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channels_sid</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ioid_counter</span> <span class="o">=</span> <span class="n">ThreadsafeCounter</span><span class="p">(</span><span class="n">dont_clash_with</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sub_counter</span> <span class="o">=</span> <span class="n">ThreadsafeCounter</span><span class="p">(</span>
+            <span class="n">dont_clash_with</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">event_add_commands</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">our_role</span> <span class="ow">is</span> <span class="n">CLIENT</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">CaprotoRuntimeError</span><span class="p">(</span><span class="s2">&quot;Client-side VirtualCircuit requires a &quot;</span>
                                       <span class="s2">&quot;non-None priority at initialization &quot;</span>
@@ -553,44 +560,21 @@
 <div class="viewcode-block" id="VirtualCircuit.new_channel_id"><a class="viewcode-back" href="../../api.html#caproto.VirtualCircuit.new_channel_id">[docs]</a>    <span class="k">def</span> <span class="nf">new_channel_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Return a valid value for a cid or sid.&quot;</span>
         <span class="c1"># Return the next sequential unused id. Wrap back to 0 on overflow.</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channel_id_counter</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">MAX_ID</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_channel_id_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">return</span> <span class="n">i</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channel_id_counter</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="VirtualCircuit.new_subscriptionid"><a class="viewcode-back" href="../../api.html#caproto.VirtualCircuit.new_subscriptionid">[docs]</a>    <span class="k">def</span> <span class="nf">new_subscriptionid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This is used by the convenience methods to obtain an unused integer ID.</span>
 <span class="sd">        It does not update any important state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Return the next sequential unused id. Wrap back to 0 on overflow.</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sub_counter</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_add_commands</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">MAX_ID</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_sub_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">return</span> <span class="n">i</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sub_counter</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="VirtualCircuit.new_ioid"><a class="viewcode-back" href="../../api.html#caproto.VirtualCircuit.new_ioid">[docs]</a>    <span class="k">def</span> <span class="nf">new_ioid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This is used by the convenience methods to obtain an unused integer ID.</span>
 <span class="sd">        It does not update any important state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Return the next sequential unused id. Wrap back to 0 on overflow.</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ioid_counter</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">MAX_ID</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_ioid_counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">continue</span>
-            <span class="k">return</span> <span class="n">i</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ioid_counter</span><span class="p">()</span></div></div>
 
 
 <span class="k">class</span> <span class="nc">_BaseChannel</span><span class="p">:</span>

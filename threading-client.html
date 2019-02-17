@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Threading Client &mdash; caproto 0.2.3+98.g8e3a6c1 documentation</title>
+  <title>Threading Client &mdash; caproto 0.2.3+109.g0126ace documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2.3+98.g8e3a6c1
+                0.2.3+109.g0126ace
               </div>
             
           
@@ -237,13 +237,13 @@ state:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">res</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="gp">In [7]: </span><span class="n">res</span>
-<span class="gh">Out[7]: </span><span class="go">ReadNotifyResponse(data=array([1.]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=1, metadata=None)</span>
+<span class="gh">Out[7]: </span><span class="go">ReadNotifyResponse(data=array([1.]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=0, metadata=None)</span>
 </pre></div>
 </div>
 <p>This object is a human-friendly representation of the server’s response. The
 raw bytes of that response are:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="nb">bytes</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">b&#39;\x00\x0f\x00\x08\x00\x06\x00\x01\x00\x00\x00\x01\x00\x00\x00\x01?\xf0\x00\x00\x00\x00\x00\x00&#39;</span>
+<span class="gh">Out[8]: </span><span class="go">b&#39;\x00\x0f\x00\x08\x00\x06\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00&#39;</span>
 </pre></div>
 </div>
 <p>Access particular fields in the response using attribute (“dot”) access on <code class="docutils literal notranslate"><span class="pre">res</span></code>.</p>
@@ -257,10 +257,10 @@ raw bytes of that response are:</p>
 <p>The underlying metadata and data are stored in efficient, contiguous-memory
 data structures.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">res</span><span class="o">.</span><span class="n">header</span>  <span class="c1"># a ctypes.BigEndianStructure</span>
-<span class="gh">Out[10]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=1)</span>
+<span class="gh">Out[10]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=0)</span>
 
 <span class="gp">In [11]: </span><span class="n">res</span><span class="o">.</span><span class="n">buffers</span>  <span class="c1"># a collection of one or more buffers</span>
-<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7ff894231648&gt;)</span>
+<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7f5fb6ce01c8&gt;)</span>
 </pre></div>
 </div>
 <p class="last">They were received directly from the socket into these structure with no
@@ -274,7 +274,7 @@ once) or one copy (if the data bridged multiple receipts).</p>
 <h3>Write<a class="headerlink" href="#write" title="Permalink to this headline">¶</a></h3>
 <p>Let us set the value to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">dt</span><span class="o">.</span><span class="n">write</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
-<span class="gh">Out[12]: </span><span class="go">WriteNotifyResponse(data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=2)</span>
+<span class="gh">Out[12]: </span><span class="go">WriteNotifyResponse(data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=1)</span>
 </pre></div>
 </div>
 <p>By default, we send <code class="docutils literal notranslate"><span class="pre">WriteNotifyResponse</span></code>, wait for a response, and return
@@ -344,12 +344,12 @@ define a second callback:</p>
 
 <span class="gp">In [21]: </span><span class="n">values</span>
 <span class="go">           Out[21]: </span>
-<span class="go">[-3.3517138334390455,</span>
-<span class="go"> -3.6056635917971827,</span>
-<span class="go"> -2.6292960182722878,</span>
-<span class="go"> -2.2125567202129606,</span>
-<span class="go"> -2.1165970815220385,</span>
-<span class="go"> -2.523926303120237]</span>
+<span class="go">[0.16399106466179014,</span>
+<span class="go"> 0.9663865071226123,</span>
+<span class="go"> 1.830148035995708,</span>
+<span class="go"> 1.3112678098878288,</span>
+<span class="go"> 1.2198358016447393,</span>
+<span class="go"> 2.108921826955518]</span>
 </pre></div>
 </div>
 <p>At any point we can remove a specific callback function:</p>
@@ -428,7 +428,7 @@ upon exiting the <code class="docutils literal notranslate"><span class="pre">wi
 background thread. As the responses come in, the <code class="docutils literal notranslate"><span class="pre">results</span></code> dictionary will be
 updated.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">results</span>
-<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([-2.5239263]), &#39;random_walk:dt&#39;: array([1.])}</span>
+<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([1.7055191]), &#39;random_walk:dt&#39;: array([1.])}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#caproto.threading.client.Batch" title="caproto.threading.client.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> for more.</p>
@@ -441,7 +441,7 @@ requested. In order to reduce the load on the network, a PV can be temporarily
 made “idle” (disconnected). It will silently, automatically reconnect the next
 time it is used.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">x</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 62783), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 57306), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">x</span><span class="o">.</span><span class="n">go_idle</span><span class="p">()</span>
 
@@ -449,10 +449,10 @@ time it is used.</p>
 <span class="gh">Out[33]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 (idle)&gt;</span>
 
 <span class="gp">In [34]: </span><span class="n">x</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([-2.99638473]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=5, metadata=None)</span>
+<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([1.7055191]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
 
 <span class="gp">In [35]: </span><span class="n">x</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                  Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 62783), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 57306), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 </pre></div>
 </div>
 <p>Notice that when the PV was read it automatically reconnected, requiring no
