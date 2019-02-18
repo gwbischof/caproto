@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.threading.client &mdash; caproto 0.2.3+109.g0126ace documentation</title>
+  <title>caproto.threading.client &mdash; caproto 0.2.3+123.g5bdf61e documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+109.g0126ace
+                0.2.3+123.g5bdf61e
               </div>
             
           
@@ -455,7 +455,6 @@
                     <span class="n">bytes_available</span> <span class="o">=</span> <span class="n">socket_bytes_available</span><span class="p">(</span>
                         <span class="n">sock</span><span class="p">,</span> <span class="n">available_buffer</span><span class="o">=</span><span class="n">avail_buf</span><span class="p">)</span>
                     <span class="n">bytes_recv</span><span class="p">,</span> <span class="n">address</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">bytes_available</span><span class="p">)</span>
-                    <span class="n">obj</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;got bytes for me&quot;</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">ex</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EAGAIN</span><span class="p">:</span>
                         <span class="c1"># register as a disconnection</span>

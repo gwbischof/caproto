@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto._utils &mdash; caproto 0.2.3+109.g0126ace documentation</title>
+  <title>caproto._utils &mdash; caproto 0.2.3+123.g5bdf61e documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+109.g0126ace
+                0.2.3+123.g5bdf61e
               </div>
             
           
@@ -573,12 +573,27 @@
     <span class="k">return</span> <span class="n">sock</span>
 
 
+<span class="k">if</span> <span class="s1">&#39;pypy&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">implementation</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_cast_buffers_to_byte</span><span class="p">(</span><span class="n">buffers</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="n">target_type</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">target_type</span><span class="p">))</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_cast_buffers_to_byte</span><span class="p">(</span><span class="n">buffers</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">memoryview</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">)</span>
+
+
 <span class="k">def</span> <span class="nf">buffer_list_slice</span><span class="p">(</span><span class="o">*</span><span class="n">buffers</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="s1">&#39;Helper function for slicing a list of buffers&#39;</span>
     <span class="k">if</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">CaprotoValueError</span><span class="p">(</span><span class="s1">&#39;Negative offset&#39;</span><span class="p">)</span>
 
-    <span class="n">buffers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">memoryview</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">)</span>
+    <span class="n">buffers</span> <span class="o">=</span> <span class="n">_cast_buffers_to_byte</span><span class="p">(</span><span class="n">buffers</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">bufidx</span><span class="p">,</span> <span class="n">buf</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">buffers</span><span class="p">):</span>
@@ -595,7 +610,7 @@
 
 <span class="k">def</span> <span class="nf">incremental_buffer_list_slice</span><span class="p">(</span><span class="o">*</span><span class="n">buffers</span><span class="p">):</span>
     <span class="s1">&#39;Incrementally slice a list of buffers&#39;</span>
-    <span class="n">buffers</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">memoryview</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">)</span>
+    <span class="n">buffers</span> <span class="o">=</span> <span class="n">_cast_buffers_to_byte</span><span class="p">(</span><span class="n">buffers</span><span class="p">)</span>
     <span class="n">total_size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">)</span>
     <span class="n">total_sent</span> <span class="o">=</span> <span class="mi">0</span>
 
