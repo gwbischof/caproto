@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Threading Client &mdash; caproto 0.2.3+123.g5bdf61e documentation</title>
+  <title>Threading Client &mdash; caproto 0.2.3+129.g74b8d86 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2.3+123.g5bdf61e
+                0.2.3+129.g74b8d86
               </div>
             
           
@@ -237,18 +237,18 @@ state:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">res</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="gp">In [7]: </span><span class="n">res</span>
-<span class="gh">Out[7]: </span><span class="go">ReadNotifyResponse(data=array([3.]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=0, metadata=None)</span>
+<span class="gh">Out[7]: </span><span class="go">ReadNotifyResponse(data=array([1.]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=0, metadata=None)</span>
 </pre></div>
 </div>
 <p>This object is a human-friendly representation of the server’s response. The
 raw bytes of that response are:</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="nb">bytes</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-<span class="gh">Out[8]: </span><span class="go">b&#39;\x00\x0f\x00\x08\x00\x06\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00@\x08\x00\x00\x00\x00\x00\x00&#39;</span>
+<span class="gh">Out[8]: </span><span class="go">b&#39;\x00\x0f\x00\x08\x00\x06\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00?\xf0\x00\x00\x00\x00\x00\x00&#39;</span>
 </pre></div>
 </div>
 <p>Access particular fields in the response using attribute (“dot”) access on <code class="docutils literal notranslate"><span class="pre">res</span></code>.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">res</span><span class="o">.</span><span class="n">data</span>
-<span class="gh">Out[9]: </span><span class="go">array([3.])</span>
+<span class="gh">Out[9]: </span><span class="go">array([1.])</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -260,7 +260,7 @@ data structures.</p>
 <span class="gh">Out[10]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=0)</span>
 
 <span class="gp">In [11]: </span><span class="n">res</span><span class="o">.</span><span class="n">buffers</span>  <span class="c1"># a collection of one or more buffers</span>
-<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7f3e42f03588&gt;)</span>
+<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7f42d768a408&gt;)</span>
 </pre></div>
 </div>
 <p class="last">They were received directly from the socket into these structure with no
@@ -340,14 +340,16 @@ define a second callback:</p>
 </div>
 <p>After some time has passed, we will have accumulated some responses.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [20]: </span><span class="nb">len</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
-<span class="gh">Out[20]: </span><span class="go">4</span>
+<span class="gh">Out[20]: </span><span class="go">6</span>
 
 <span class="gp">In [21]: </span><span class="n">values</span>
 <span class="go">           Out[21]: </span>
-<span class="go">[0.8275585843407478,</span>
-<span class="go"> -0.1101796178363248,</span>
-<span class="go"> 0.03206794842769045,</span>
-<span class="go"> 0.4236255209006101]</span>
+<span class="go">[0.06572611992263888,</span>
+<span class="go"> 0.45265300744740156,</span>
+<span class="go"> -0.03152356763232578,</span>
+<span class="go"> -0.8603222940970952,</span>
+<span class="go"> -1.8486464578502357,</span>
+<span class="go"> -1.5095210063623823]</span>
 </pre></div>
 </div>
 <p>At any point we can remove a specific callback function:</p>
@@ -426,7 +428,7 @@ upon exiting the <code class="docutils literal notranslate"><span class="pre">wi
 background thread. As the responses come in, the <code class="docutils literal notranslate"><span class="pre">results</span></code> dictionary will be
 updated.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">results</span>
-<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([0.44632947]), &#39;random_walk:dt&#39;: array([1.])}</span>
+<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([-1.50952101]), &#39;random_walk:dt&#39;: array([1.])}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#caproto.threading.client.Batch" title="caproto.threading.client.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> for more.</p>
@@ -439,7 +441,7 @@ requested. In order to reduce the load on the network, a PV can be temporarily
 made “idle” (disconnected). It will silently, automatically reconnect the next
 time it is used.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">x</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 61834), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 56964), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">x</span><span class="o">.</span><span class="n">go_idle</span><span class="p">()</span>
 
@@ -447,10 +449,10 @@ time it is used.</p>
 <span class="gh">Out[33]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 (idle)&gt;</span>
 
 <span class="gp">In [34]: </span><span class="n">x</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([0.44632947]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
+<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([-2.33100452]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
 
 <span class="gp">In [35]: </span><span class="n">x</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                 Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 61834), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                  Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 56964), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 </pre></div>
 </div>
 <p>Notice that when the PV was read it automatically reconnected, requiring no

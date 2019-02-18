@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto._circuit &mdash; caproto 0.2.3+123.g5bdf61e documentation</title>
+  <title>caproto._circuit &mdash; caproto 0.2.3+129.g74b8d86 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+123.g5bdf61e
+                0.2.3+129.g74b8d86
               </div>
             
           
@@ -422,7 +422,7 @@
                                       <span class="n">WriteNotifyResponse</span><span class="p">)):</span>
                 <span class="c1"># Identify the Channel based on its ioid.</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">chan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span><span class="p">[</span><span class="n">command</span><span class="o">.</span><span class="n">ioid</span><span class="p">]</span>
+                    <span class="n">chan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">ioid</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                     <span class="n">err</span> <span class="o">=</span> <span class="n">get_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">our_role</span><span class="p">,</span> <span class="n">command</span><span class="p">)</span>
                     <span class="k">raise</span> <span class="n">err</span><span class="p">(</span><span class="s2">&quot;Unknown Channel ioid </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">ioid</span><span class="p">))</span>
@@ -501,6 +501,11 @@
                                       <span class="n">ClearChannelResponse</span><span class="p">)):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">channels_sid</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">chan</span><span class="o">.</span><span class="n">sid</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">chan</span><span class="o">.</span><span class="n">cid</span><span class="p">)</span>
+                <span class="c1"># put in list comprehension (not generator) to not change</span>
+                <span class="c1"># the size while iterating</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="n">chan</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ioids</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="p">(</span><span class="n">ReadNotifyRequest</span><span class="p">,</span> <span class="n">ReadRequest</span><span class="p">,</span>
                                       <span class="n">WriteNotifyRequest</span><span class="p">)):</span>
                 <span class="c1"># Stash the ioid for later reference.</span>
