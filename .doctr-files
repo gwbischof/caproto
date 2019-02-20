@@ -26,6 +26,7 @@
 ./_sources/references.rst.txt
 ./_sources/release-notes.rst.txt
 ./_sources/servers.rst.txt
+./_sources/shark.rst.txt
 ./_sources/sync-client.rst.txt
 ./_sources/threading-client.rst.txt
 ./_static/ajax-loader.gif
@@ -116,5 +117,6 @@
 ./search.html
 ./searchindex.js
 ./servers.html
+./shark.html
 ./sync-client.html
 ./threading-client.html
