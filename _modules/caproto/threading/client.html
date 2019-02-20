@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.threading.client &mdash; caproto 0.2.3+129.g74b8d86 documentation</title>
+  <title>caproto.threading.client &mdash; caproto 0.2.3+138.g6c38a64 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+129.g74b8d86
+                0.2.3+138.g6c38a64
               </div>
             
           
@@ -846,6 +846,26 @@
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                 <span class="n">item</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">retirement_deadline</span>
 
+<div class="viewcode-block" id="SharedBroadcaster.time_since_last_heard"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.SharedBroadcaster.time_since_last_heard">[docs]</a>    <span class="k">def</span> <span class="nf">time_since_last_heard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Map each known server address to seconds since its last message.</span>
+
+<span class="sd">        The time is reset to 0 whenever we receive a TCP message related to</span>
+<span class="sd">        user activity *or* a Beacon. Servers are expected to send Beacons at</span>
+<span class="sd">        regular intervals. If we do not receive either a Beacon or TCP message,</span>
+<span class="sd">        we initiate an Echo over TCP, to which the server is expected to</span>
+<span class="sd">        promptly respond.</span>
+
+<span class="sd">        Therefore, the time reported here should not much exceed</span>
+<span class="sd">        ``EPICS_CA_CONN_TMO`` (default 30 seconds unless overriden by that</span>
+<span class="sd">        environment variable) if the server is healthy.</span>
+
+<span class="sd">        If the server fails to send a Beacon on schedule *and* fails to reply to</span>
+<span class="sd">        an Echo, the server is assumed dead. A warning is issued, and all PVs</span>
+<span class="sd">        are disconnected to initiate a reconnection attempt.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">address</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span> <span class="k">for</span> <span class="n">address</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_heard</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
+
     <span class="k">def</span> <span class="nf">_check_for_unresponsive_servers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Broadcaster check for unresponsive servers loop is running.&#39;</span><span class="p">)</span>
 
@@ -853,6 +873,7 @@
         <span class="n">checking</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># map address to deadline for check to resolve</span>
         <span class="n">servers</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="n">weakref</span><span class="o">.</span><span class="n">WeakSet</span><span class="p">)</span>  <span class="c1"># map address to VirtualCircuitManagers</span>
         <span class="n">last_heard</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># map address to time of last response</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_heard</span> <span class="o">=</span> <span class="n">last_heard</span>
 
         <span class="c1"># Make locals to save getattr lookups in the loop.</span>
         <span class="n">last_beacon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_beacon</span>
@@ -2044,7 +2065,12 @@
 <div class="viewcode-block" id="PV.unsubscribe_all"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.PV.unsubscribe_all">[docs]</a>    <span class="k">def</span> <span class="nf">unsubscribe_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Clear all subscriptions. (Remove all user callbacks from them.)&quot;</span>
         <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">sub</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div></div>
+            <span class="n">sub</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+    <span class="nd">@ensure_connected</span>
+    <span class="k">def</span> <span class="nf">time_since_last_heard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">PV_DEFAULT_TIMEOUT</span><span class="p">):</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_manager</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">address</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">time_since_last_heard</span><span class="p">()[</span><span class="n">address</span><span class="p">]</span></div>
 
     <span class="c1"># def __hash__(self):</span>
     <span class="c1">#     return id((self.context, self.circuit_manager, self.name))</span>
