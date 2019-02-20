@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Threading Client &mdash; caproto 0.2.3+154.gb73f9f9 documentation</title>
+  <title>Threading Client &mdash; caproto 0.2.3+160.g6da7697 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2.3+154.gb73f9f9
+                0.2.3+160.g6da7697
               </div>
             
           
@@ -262,7 +262,7 @@ data structures.</p>
 <span class="gh">Out[10]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=0)</span>
 
 <span class="gp">In [11]: </span><span class="n">res</span><span class="o">.</span><span class="n">buffers</span>  <span class="c1"># a collection of one or more buffers</span>
-<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7fdb6c32c4c8&gt;)</span>
+<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7fd4e4db9048&gt;)</span>
 </pre></div>
 </div>
 <p class="last">They were received directly from the socket into these structure with no
@@ -346,12 +346,12 @@ define a second callback:</p>
 
 <span class="gp">In [21]: </span><span class="n">values</span>
 <span class="go">           Out[21]: </span>
-<span class="go">[1.5492259204157217,</span>
-<span class="go"> 2.5190389849393275,</span>
-<span class="go"> 2.543527877584465,</span>
-<span class="go"> 2.129370325613324,</span>
-<span class="go"> 2.521812469203631,</span>
-<span class="go"> 3.166754386840247]</span>
+<span class="go">[-0.25711622676731816,</span>
+<span class="go"> -0.19758104426445589,</span>
+<span class="go"> 0.6763217720303885,</span>
+<span class="go"> 0.19343511418014736,</span>
+<span class="go"> 0.27606562763993403,</span>
+<span class="go"> 1.1173569352298633]</span>
 </pre></div>
 </div>
 <p>At any point we can remove a specific callback function:</p>
@@ -430,7 +430,7 @@ upon exiting the <code class="docutils literal notranslate"><span class="pre">wi
 background thread. As the responses come in, the <code class="docutils literal notranslate"><span class="pre">results</span></code> dictionary will be
 updated.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">results</span>
-<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([3.16675439]), &#39;random_walk:dt&#39;: array([1.])}</span>
+<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([1.11735694]), &#39;random_walk:dt&#39;: array([1.])}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#caproto.threading.client.Batch" title="caproto.threading.client.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> for more.</p>
@@ -443,7 +443,7 @@ requested. In order to reduce the load on the network, a PV can be temporarily
 made “idle” (disconnected). It will silently, automatically reconnect the next
 time it is used.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">x</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 58068), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 52952), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">x</span><span class="o">.</span><span class="n">go_idle</span><span class="p">()</span>
 
@@ -451,10 +451,10 @@ time it is used.</p>
 <span class="gh">Out[33]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 (idle)&gt;</span>
 
 <span class="gp">In [34]: </span><span class="n">x</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([3.52938793]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
+<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([1.53965289]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
 
 <span class="gp">In [35]: </span><span class="n">x</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                 Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 58068), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                 Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 52952), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 </pre></div>
 </div>
 <p>Notice that when the PV was read it automatically reconnected, requiring no
@@ -494,7 +494,7 @@ the most recent update and then any future updates.</p>
 </div>
 </div>
 <div class="section" id="server-health-check">
-<h3>Server Health Check<a class="headerlink" href="#server-health-check" title="Permalink to this headline">¶</a></h3>
+<span id="id1"></span><h3>Server Health Check<a class="headerlink" href="#server-health-check" title="Permalink to this headline">¶</a></h3>
 <p>To check how much time has passed (in seconds) since each known server was last
 heard from, use:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">time_since_last_heard</span><span class="p">()</span>
@@ -558,10 +558,10 @@ PVs, access the channel logger by name like so:</p>
 <dt><strong>broadcaster</strong> <span class="classifier-delimiter">:</span> <span class="classifier">SharedBroadcaster, optional</span></dt>
 <dd><p class="first last">If None is specified, a fresh one is instantiated.</p>
 </dd>
-<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
 <dd><p class="first last">Number of seconds before a CaprotoTimeoutError is raised. This default
-can be overridden at the PV level or for any specific operation.  If
-unset, the default is 2 seconds.</p>
+can be overridden at the PV level or for any given operation. If
+unset, the default is 2 seconds. If None, never timeout.</p>
 </dd>
 <dt><strong>host_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">string, optional</span></dt>
 <dd><p class="first last">uses value of <code class="docutils literal notranslate"><span class="pre">socket.gethostname()</span></code> by default</p>
@@ -618,10 +618,11 @@ of <code class="docutils literal notranslate"><span class="pre">PV</span></code>
 instance of <code class="docutils literal notranslate"><span class="pre">PV</span></code> whose state has changed and <code class="docutils literal notranslate"><span class="pre">access_rights</span></code> is
 a member of the caproto <code class="docutils literal notranslate"><span class="pre">AccessRights</span></code> enum</p>
 </dd>
-<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
-<dd><p class="first last">Number of seconds before a CaprotoTimeoutError is raised. This default
-can be overridden for any specific operation.  If None, fall back
-to the default timeout set by the Context.</p>
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
+<dd><p class="first last">Number of seconds before a CaprotoTimeoutError is raised. This
+default can be overridden for any specific operation. By default,
+fall back to the default timeout set by the Context. If None, never
+timeout.</p>
 </dd>
 </dl>
 </td>
@@ -676,10 +677,10 @@ parameter.</p>
 <dt><strong>callback</strong> <span class="classifier-delimiter">:</span> <span class="classifier">callable or None</span></dt>
 <dd><p class="first last">Called with the response as its argument when received.</p>
 </dd>
-<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None</span></dt>
-<dd><p class="first last">Number of seconds to wait before raising CaprotoTimeoutError.
-Default is PV.timeout, which falls back to Context.timeout if not
-set.</p>
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
+<dd><p class="first last">Seconds to wait before a CaprotoTimeoutError is raised. Default is
+<code class="docutils literal notranslate"><span class="pre">PV.timeout</span></code>, which falls back to <code class="docutils literal notranslate"><span class="pre">PV.context.timeout</span></code> if not
+set. If None, never timeout.</p>
 </dd>
 <dt><strong>data_type</strong> <span class="classifier-delimiter">:</span> <span class="classifier">{‘native’, ‘status’, ‘time’, ‘graphic’, ‘control’} or ChannelType or int ID, optional</span></dt>
 <dd><p class="first last">Request specific data type or a class of data types, matched to the
@@ -752,6 +753,38 @@ is added.</p>
 <p>See the docstring for <a class="reference internal" href="#caproto.threading.client.Subscription" title="caproto.threading.client.Subscription"><code class="xref py py-class docutils literal notranslate"><span class="pre">Subscription</span></code></a> for more.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="caproto.threading.client.PV.time_since_last_heard">
+<code class="descname">time_since_last_heard</code><span class="sig-paren">(</span><em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.time_since_last_heard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.time_since_last_heard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seconds since last message from the server that provides this channel.</p>
+<p>The time is reset to 0 whenever we receive a TCP message related to
+user activity <em>or</em> a Beacon. Servers are expected to send Beacons at
+regular intervals. If we do not receive either a Beacon or TCP message,
+we initiate an Echo over TCP, to which the server is expected to
+promptly respond.</p>
+<p>Therefore, the time reported here should not much exceed
+<code class="docutils literal notranslate"><span class="pre">EPICS_CA_CONN_TMO</span></code> (default 30 seconds unless overriden by that
+environment variable) if the server is healthy.</p>
+<p>If the server fails to send a Beacon on schedule <em>and</em> fails to reply to
+an Echo, the server is assumed dead. A warning is issued, and all PVs
+are disconnected to initiate a reconnection attempt.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
+<dd><p class="first last">Seconds to wait before a CaprotoTimeoutError is raised. Default is
+<code class="docutils literal notranslate"><span class="pre">PV.timeout</span></code>, which falls back to <code class="docutils literal notranslate"><span class="pre">PV.context.timeout</span></code> if not
+set. If None, never timeout.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="caproto.threading.client.PV.timeout">
 <code class="descname">timeout</code><a class="headerlink" href="#caproto.threading.client.PV.timeout" title="Permalink to this definition">¶</a></dt>
@@ -769,6 +802,27 @@ is added.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="caproto.threading.client.PV.wait_for_connection">
+<code class="descname">wait_for_connection</code><span class="sig-paren">(</span><em>*</em>, <em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.wait_for_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.wait_for_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for this PV to be connected.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
+<dd><p class="first last">Seconds to wait before a CaprotoTimeoutError is raised. Default is
+<code class="docutils literal notranslate"><span class="pre">PV.timeout</span></code>, which falls back to <code class="docutils literal notranslate"><span class="pre">PV.context.timeout</span></code> if not
+set. If None, never timeout.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="caproto.threading.client.PV.wait_for_search">
 <code class="descname">wait_for_search</code><span class="sig-paren">(</span><em>*</em>, <em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.wait_for_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.wait_for_search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for this PV to be found.</p>
@@ -779,8 +833,10 @@ for an address (and a VirtualCircuit) to be assigned.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd><p class="first last">Seconds before a CaprotoTimeoutError is raised. Default is 2.</p>
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
+<dd><p class="first last">Seconds to wait before a CaprotoTimeoutError is raised. Default is
+<code class="docutils literal notranslate"><span class="pre">PV.timeout</span></code>, which falls back to Context.timeout if not set. If
+None, never timeout.</p>
 </dd>
 </dl>
 </td>
@@ -813,9 +869,10 @@ parameter.</p>
 <dt><strong>callback</strong> <span class="classifier-delimiter">:</span> <span class="classifier">callable or None</span></dt>
 <dd><p class="first last">Called with the WriteNotifyResponse as its argument when received.</p>
 </dd>
-<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None</span></dt>
-<dd><p class="first last">Number of seconds to wait before raising CaprotoTimeoutError.
-Default is 2.</p>
+<dt><strong>timeout</strong> <span class="classifier-delimiter">:</span> <span class="classifier">number or None, optional</span></dt>
+<dd><p class="first last">Seconds to wait before a CaprotoTimeoutError is raised. Default is
+<code class="docutils literal notranslate"><span class="pre">PV.timeout</span></code>, which falls back to <code class="docutils literal notranslate"><span class="pre">PV.context.timeout</span></code> if not
+set. If None, never timeout.</p>
 </dd>
 <dt><strong>notify</strong> <span class="classifier-delimiter">:</span> <span class="classifier">boolean or None</span></dt>
 <dd><p class="first last">If None (default), set to True if wait=True or callback is set.

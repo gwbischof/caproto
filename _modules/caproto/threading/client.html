@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.threading.client &mdash; caproto 0.2.3+154.gb73f9f9 documentation</title>
+  <title>caproto.threading.client &mdash; caproto 0.2.3+160.g6da7697 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.3+154.gb73f9f9
+                0.2.3+160.g6da7697
               </div>
             
           
@@ -1047,10 +1047,10 @@
 <span class="sd">    ----------</span>
 <span class="sd">    broadcaster : SharedBroadcaster, optional</span>
 <span class="sd">        If None is specified, a fresh one is instantiated.</span>
-<span class="sd">    timeout : float</span>
+<span class="sd">    timeout : number or None, optional</span>
 <span class="sd">        Number of seconds before a CaprotoTimeoutError is raised. This default</span>
-<span class="sd">        can be overridden at the PV level or for any specific operation.  If</span>
-<span class="sd">        unset, the default is 2 seconds.</span>
+<span class="sd">        can be overridden at the PV level or for any given operation. If</span>
+<span class="sd">        unset, the default is 2 seconds. If None, never timeout.</span>
 <span class="sd">    host_name : string, optional</span>
 <span class="sd">        uses value of ``socket.gethostname()`` by default</span>
 <span class="sd">    client_name : string, optional</span>
@@ -1152,10 +1152,11 @@
 <span class="sd">            Expected signature: ``f(pv, access_rights)`` where ``pv`` is the</span>
 <span class="sd">            instance of ``PV`` whose state has changed and ``access_rights`` is</span>
 <span class="sd">            a member of the caproto ``AccessRights`` enum</span>
-<span class="sd">        timeout : float, optional</span>
-<span class="sd">            Number of seconds before a CaprotoTimeoutError is raised. This default</span>
-<span class="sd">            can be overridden for any specific operation.  If None, fall back</span>
-<span class="sd">            to the default timeout set by the Context.</span>
+<span class="sd">        timeout : number or None, optional</span>
+<span class="sd">            Number of seconds before a CaprotoTimeoutError is raised. This</span>
+<span class="sd">            default can be overridden for any specific operation. By default,</span>
+<span class="sd">            fall back to the default timeout set by the Context. If None, never</span>
+<span class="sd">            timeout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_disconnected</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ContextDisconnectedError</span><span class="p">(</span><span class="s2">&quot;This Context is no longer usable.&quot;</span><span class="p">)</span>
@@ -1794,8 +1795,10 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        timeout : float</span>
-<span class="sd">            Seconds before a CaprotoTimeoutError is raised. Default is 2.</span>
+<span class="sd">        timeout : number or None, optional</span>
+<span class="sd">            Seconds to wait before a CaprotoTimeoutError is raised. Default is</span>
+<span class="sd">            ``PV.timeout``, which falls back to Context.timeout if not set. If</span>
+<span class="sd">            None, never timeout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="n">PV_DEFAULT_TIMEOUT</span><span class="p">:</span>
             <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>
@@ -1805,9 +1808,19 @@
                                       <span class="s2">&quot;timeout.&quot;</span>
                                       <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">timeout</span><span class="p">)))</span></div>
 
-    <span class="nd">@ensure_connected</span>
+<div class="viewcode-block" id="PV.wait_for_connection"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.PV.wait_for_connection">[docs]</a>    <span class="nd">@ensure_connected</span>
     <span class="k">def</span> <span class="nf">wait_for_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">PV_DEFAULT_TIMEOUT</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wait for this PV to be connected.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        timeout : number or None, optional</span>
+<span class="sd">            Seconds to wait before a CaprotoTimeoutError is raised. Default is</span>
+<span class="sd">            ``PV.timeout``, which falls back to ``PV.context.timeout`` if not</span>
+<span class="sd">            set. If None, never timeout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="PV.go_idle"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.PV.go_idle">[docs]</a>    <span class="k">def</span> <span class="nf">go_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request to clear this Channel to reduce load on client and server.</span>
@@ -1862,10 +1875,10 @@
 <span class="sd">            parameter.</span>
 <span class="sd">        callback : callable or None</span>
 <span class="sd">            Called with the response as its argument when received.</span>
-<span class="sd">        timeout : number or None</span>
-<span class="sd">            Number of seconds to wait before raising CaprotoTimeoutError.</span>
-<span class="sd">            Default is PV.timeout, which falls back to Context.timeout if not</span>
-<span class="sd">            set.</span>
+<span class="sd">        timeout : number or None, optional</span>
+<span class="sd">            Seconds to wait before a CaprotoTimeoutError is raised. Default is</span>
+<span class="sd">            ``PV.timeout``, which falls back to ``PV.context.timeout`` if not</span>
+<span class="sd">            set. If None, never timeout.</span>
 <span class="sd">        data_type : {&#39;native&#39;, &#39;status&#39;, &#39;time&#39;, &#39;graphic&#39;, &#39;control&#39;} or ChannelType or int ID, optional</span>
 <span class="sd">            Request specific data type or a class of data types, matched to the</span>
 <span class="sd">            channel&#39;s native data type. Default is Channel&#39;s native data type.</span>
@@ -1940,9 +1953,10 @@
 <span class="sd">            parameter.</span>
 <span class="sd">        callback : callable or None</span>
 <span class="sd">            Called with the WriteNotifyResponse as its argument when received.</span>
-<span class="sd">        timeout : number or None</span>
-<span class="sd">            Number of seconds to wait before raising CaprotoTimeoutError.</span>
-<span class="sd">            Default is 2.</span>
+<span class="sd">        timeout : number or None, optional</span>
+<span class="sd">            Seconds to wait before a CaprotoTimeoutError is raised. Default is</span>
+<span class="sd">            ``PV.timeout``, which falls back to ``PV.context.timeout`` if not</span>
+<span class="sd">            set. If None, never timeout.</span>
 <span class="sd">        notify : boolean or None</span>
 <span class="sd">            If None (default), set to True if wait=True or callback is set.</span>
 <span class="sd">            Can be manually set to True or False. Will raise ValueError if set</span>
@@ -2068,10 +2082,34 @@
         <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptions</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">sub</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
-    <span class="nd">@ensure_connected</span>
+<div class="viewcode-block" id="PV.time_since_last_heard"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.PV.time_since_last_heard">[docs]</a>    <span class="nd">@ensure_connected</span>
     <span class="k">def</span> <span class="nf">time_since_last_heard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">PV_DEFAULT_TIMEOUT</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Seconds since last message from the server that provides this channel.</span>
+
+<span class="sd">        The time is reset to 0 whenever we receive a TCP message related to</span>
+<span class="sd">        user activity *or* a Beacon. Servers are expected to send Beacons at</span>
+<span class="sd">        regular intervals. If we do not receive either a Beacon or TCP message,</span>
+<span class="sd">        we initiate an Echo over TCP, to which the server is expected to</span>
+<span class="sd">        promptly respond.</span>
+
+<span class="sd">        Therefore, the time reported here should not much exceed</span>
+<span class="sd">        ``EPICS_CA_CONN_TMO`` (default 30 seconds unless overriden by that</span>
+<span class="sd">        environment variable) if the server is healthy.</span>
+
+<span class="sd">        If the server fails to send a Beacon on schedule *and* fails to reply to</span>
+<span class="sd">        an Echo, the server is assumed dead. A warning is issued, and all PVs</span>
+<span class="sd">        are disconnected to initiate a reconnection attempt.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        timeout : number or None, optional</span>
+<span class="sd">            Seconds to wait before a CaprotoTimeoutError is raised. Default is</span>
+<span class="sd">            ``PV.timeout``, which falls back to ``PV.context.timeout`` if not</span>
+<span class="sd">            set. If None, never timeout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit_manager</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">address</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">time_since_last_heard</span><span class="p">()[</span><span class="n">address</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">time_since_last_heard</span><span class="p">()[</span><span class="n">address</span><span class="p">]</span></div></div>
 
     <span class="c1"># def __hash__(self):</span>
     <span class="c1">#     return id((self.context, self.circuit_manager, self.name))</span>
