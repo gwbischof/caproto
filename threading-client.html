@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Threading Client &mdash; caproto 0.2.3+129.g74b8d86 documentation</title>
+  <title>Threading Client &mdash; caproto 0.2.3+138.g6c38a64 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2.3+129.g74b8d86
+                0.2.3+138.g6c38a64
               </div>
             
           
@@ -101,6 +101,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#go-idle">Go Idle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#canceling-searches">Canceling Searches</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#events-off-and-on">Events Off and On</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#server-health-check">Server Health Check</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#loggers-for-debugging">Loggers for Debugging</a></li>
 </ul>
 </li>
@@ -260,7 +261,7 @@ data structures.</p>
 <span class="gh">Out[10]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=0)</span>
 
 <span class="gp">In [11]: </span><span class="n">res</span><span class="o">.</span><span class="n">buffers</span>  <span class="c1"># a collection of one or more buffers</span>
-<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7f42d768a408&gt;)</span>
+<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7fa2142b7408&gt;)</span>
 </pre></div>
 </div>
 <p class="last">They were received directly from the socket into these structure with no
@@ -344,12 +345,12 @@ define a second callback:</p>
 
 <span class="gp">In [21]: </span><span class="n">values</span>
 <span class="go">           Out[21]: </span>
-<span class="go">[0.06572611992263888,</span>
-<span class="go"> 0.45265300744740156,</span>
-<span class="go"> -0.03152356763232578,</span>
-<span class="go"> -0.8603222940970952,</span>
-<span class="go"> -1.8486464578502357,</span>
-<span class="go"> -1.5095210063623823]</span>
+<span class="go">[-2.9178927725591177,</span>
+<span class="go"> -2.085243394707215,</span>
+<span class="go"> -1.4874439737860115,</span>
+<span class="go"> -2.007335663525378,</span>
+<span class="go"> -2.5059493440314133,</span>
+<span class="go"> -2.7731514344107557]</span>
 </pre></div>
 </div>
 <p>At any point we can remove a specific callback function:</p>
@@ -428,7 +429,7 @@ upon exiting the <code class="docutils literal notranslate"><span class="pre">wi
 background thread. As the responses come in, the <code class="docutils literal notranslate"><span class="pre">results</span></code> dictionary will be
 updated.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">results</span>
-<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([-1.50952101]), &#39;random_walk:dt&#39;: array([1.])}</span>
+<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([-2.77315143]), &#39;random_walk:dt&#39;: array([1.])}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#caproto.threading.client.Batch" title="caproto.threading.client.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> for more.</p>
@@ -441,7 +442,7 @@ requested. In order to reduce the load on the network, a PV can be temporarily
 made “idle” (disconnected). It will silently, automatically reconnect the next
 time it is used.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">x</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 56964), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 65381), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">x</span><span class="o">.</span><span class="n">go_idle</span><span class="p">()</span>
 
@@ -449,10 +450,10 @@ time it is used.</p>
 <span class="gh">Out[33]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 (idle)&gt;</span>
 
 <span class="gp">In [34]: </span><span class="n">x</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([-2.33100452]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
+<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([-2.35641067]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
 
 <span class="gp">In [35]: </span><span class="n">x</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                  Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 56964), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                  Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 65381), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 </pre></div>
 </div>
 <p>Notice that when the PV was read it automatically reconnected, requiring no
@@ -490,6 +491,20 @@ the most recent update and then any future updates.</p>
 <span class="n">x</span><span class="o">.</span><span class="n">circuit_manager</span><span class="o">.</span><span class="n">events_on</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="server-health-check">
+<h3>Server Health Check<a class="headerlink" href="#server-health-check" title="Permalink to this headline">¶</a></h3>
+<p>To check how much time has passed (in seconds) since each known server was last
+heard from, use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">time_since_last_heard</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>As a convenience, check on the server connected to a specific PV using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">time_since_last_heard</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="#caproto.threading.client.SharedBroadcaster.time_since_last_heard" title="caproto.threading.client.SharedBroadcaster.time_since_last_heard"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SharedBroadcaster.time_since_last_heard()</span></code></a> API documentation below
+for details.</p>
 </div>
 <div class="section" id="loggers-for-debugging">
 <span id="threading-loggers"></span><h3>Loggers for Debugging<a class="headerlink" href="#loggers-for-debugging" title="Permalink to this headline">¶</a></h3>
@@ -1078,6 +1093,23 @@ debugging and should not be needed in normal use.</p>
 <dt id="caproto.threading.client.SharedBroadcaster.send">
 <code class="descname">send</code><span class="sig-paren">(</span><em>port</em>, <em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process a command and transport it over the UDP socket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="caproto.threading.client.SharedBroadcaster.time_since_last_heard">
+<code class="descname">time_since_last_heard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.time_since_last_heard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.time_since_last_heard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map each known server address to seconds since its last message.</p>
+<p>The time is reset to 0 whenever we receive a TCP message related to
+user activity <em>or</em> a Beacon. Servers are expected to send Beacons at
+regular intervals. If we do not receive either a Beacon or TCP message,
+we initiate an Echo over TCP, to which the server is expected to
+promptly respond.</p>
+<p>Therefore, the time reported here should not much exceed
+<code class="docutils literal notranslate"><span class="pre">EPICS_CA_CONN_TMO</span></code> (default 30 seconds unless overriden by that
+environment variable) if the server is healthy.</p>
+<p>If the server fails to send a Beacon on schedule <em>and</em> fails to reply to
+an Echo, the server is assumed dead. A warning is issued, and all PVs
+are disconnected to initiate a reconnection attempt.</p>
 </dd></dl>
 
 </dd></dl>
