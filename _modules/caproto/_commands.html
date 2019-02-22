@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto._commands &mdash; caproto 0.3.0 documentation</title>
+  <title>caproto._commands &mdash; caproto 0.3.0+10.g2ade4e9 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.3.0+10.g2ade4e9
               </div>
             
           
@@ -462,11 +462,7 @@
 
 
 <span class="k">def</span> <span class="nf">get_command_class</span><span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
-    <span class="n">_class</span> <span class="o">=</span> <span class="n">Commands</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="n">header</span><span class="o">.</span><span class="n">command</span><span class="p">]</span>
-    <span class="c1"># Special case for EventCancelResponse which is coded inconsistently.</span>
-    <span class="k">if</span> <span class="n">role</span> <span class="ow">is</span> <span class="n">SERVER</span> <span class="ow">and</span> <span class="n">header</span><span class="o">.</span><span class="n">command</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">header</span><span class="o">.</span><span class="n">payload_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_class</span> <span class="o">=</span> <span class="n">Commands</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">_class</span>
+    <span class="k">return</span> <span class="n">Commands</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="n">header</span><span class="o">.</span><span class="n">command</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">read_datagram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">role</span><span class="p">):</span>
@@ -476,7 +472,7 @@
     <span class="k">while</span> <span class="n">barray</span><span class="p">:</span>
         <span class="n">header</span> <span class="o">=</span> <span class="n">MessageHeader</span><span class="o">.</span><span class="n">from_buffer</span><span class="p">(</span><span class="n">barray</span><span class="p">)</span>
         <span class="n">barray</span> <span class="o">=</span> <span class="n">barray</span><span class="p">[</span><span class="n">_MessageHeaderSize</span><span class="p">:]</span>
-        <span class="n">_class</span> <span class="o">=</span> <span class="n">get_command_class</span><span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+        <span class="n">_class</span> <span class="o">=</span> <span class="n">Commands</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="n">header</span><span class="o">.</span><span class="n">command</span><span class="p">]</span>
         <span class="n">payload_size</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">payload_size</span>
         <span class="k">if</span> <span class="n">_class</span><span class="o">.</span><span class="n">HAS_PAYLOAD</span><span class="p">:</span>
             <span class="n">payload_bytes</span> <span class="o">=</span> <span class="n">barray</span><span class="p">[:</span><span class="n">header</span><span class="o">.</span><span class="n">payload_size</span><span class="p">]</span>
@@ -543,7 +539,7 @@
     <span class="k">if</span> <span class="n">num_bytes_needed</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">NEED_DATA</span><span class="p">,</span> <span class="n">num_bytes_needed</span>
 
-    <span class="n">_class</span> <span class="o">=</span> <span class="n">get_command_class</span><span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+    <span class="n">_class</span> <span class="o">=</span> <span class="n">Commands</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="n">header</span><span class="o">.</span><span class="n">command</span><span class="p">]</span>
 
     <span class="n">header_size</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">sizeof</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
     <span class="n">total_size</span> <span class="o">=</span> <span class="n">header_size</span> <span class="o">+</span> <span class="n">header</span><span class="o">.</span><span class="n">payload_size</span>
@@ -1245,8 +1241,6 @@
 <span class="sd">        Integer ID for this subscription.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Actually this is coded with the ID = 1 like EventAdd*.</span>
-    <span class="c1"># This is the only weird exception so we special-case it in the function</span>
-    <span class="c1"># get_command_class.</span>
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">ID</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">HAS_PAYLOAD</span> <span class="o">=</span> <span class="kc">False</span>
