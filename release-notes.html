@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Release History &mdash; caproto 0.3.0+10.g2ade4e9 documentation</title>
+  <title>Release History &mdash; caproto 0.3.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.3.0+10.g2ade4e9
+                0.3.1
               </div>
             
           
@@ -110,6 +110,10 @@
 <li class="toctree-l1"><a class="reference internal" href="protocol-compliance.html">Details of our Protocol Compliance for CA Nerds</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Release History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2019-03-05">v0.3.1 (2019-03-05)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fixes">Fixes</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-0-2019-02-20">v0.3.0 (2019-02-20)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
@@ -212,6 +216,24 @@
             
   <div class="section" id="release-history">
 <h1>Release History<a class="headerlink" href="#release-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v0-3-1-2019-03-05">
+<h2>v0.3.1 (2019-03-05)<a class="headerlink" href="#v0-3-1-2019-03-05" title="Permalink to this headline">¶</a></h2>
+<p>This is a bug-fix release addressing issues related to empty (zero-length)
+channel data.</p>
+<div class="section" id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Fix servers’ support for empty (zero-length) data.</li>
+<li>Assume the <em>maximum</em> length of a channel initialized with empty data is one
+(i.e. assume it is scalar).</li>
+<li>Address an ambiguity in the Channel Access protocol: a subscription update
+(<code class="docutils literal notranslate"><span class="pre">EventAddResponse</span></code>) indicating empty data and a confirmation of a request
+to cancel the subscription (<code class="docutils literal notranslate"><span class="pre">EventCancelResponse</span></code>) serialize identically,
+and so the client must make a best effort to interpret based on context which
+of the two is intended.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="v0-3-0-2019-02-20">
 <h2>v0.3.0 (2019-02-20)<a class="headerlink" href="#v0-3-0-2019-02-20" title="Permalink to this headline">¶</a></h2>
 <p>This release introduces <a class="reference internal" href="shark.html"><span class="doc">caproto-shark</span></a> and other convenient
@@ -311,7 +333,7 @@ suite.</li>
 <div class="section" id="v0-2-2-2018-11-15">
 <h2>v0.2.2 (2018-11-15)<a class="headerlink" href="#v0-2-2-2018-11-15" title="Permalink to this headline">¶</a></h2>
 <p>The release improves the performance of the threading client and adds support
-for value-based alarms. Additionally, it provides more control over serach and
+for value-based alarms. Additionally, it provides more control over search and
 implements back-off in a way more consistent with (but not yet fully consistent
 with) EPICS’ reference implementation.</p>
 <div class="section" id="more-control-over-search">
@@ -324,7 +346,7 @@ a fast regular rate forever. Now, it backs off from that initial rate and
 rests at a slow interval to avoid creating too much wasteful network traffic.
 There is a new method,
 <a class="reference internal" href="threading-client.html#caproto.threading.client.SharedBroadcaster.cancel" title="caproto.threading.client.SharedBroadcaster.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cancel()</span></code></a>, for manually
-canceling some requests altogether if a response is never excepected (e.g. a
+canceling some requests altogether if a response is never expected (e.g. a
 typo). There is also a new method for manually resending all unanswered
 search requests,
 <a class="reference internal" href="threading-client.html#caproto.threading.client.SharedBroadcaster.search_now" title="caproto.threading.client.SharedBroadcaster.search_now"><code class="xref py py-meth docutils literal notranslate"><span class="pre">search_now()</span></code></a>,
@@ -409,9 +431,9 @@ process before reading the current value. If the write happens to complete
 in less than 0.001 seconds, the read will reflect the new value. This
 behavior is in the spirit of, but distinct from, EPICS’ “synchronous writes.”
 EPICS allows a device to block while writing if it promises to finish quickly
-(&lt; 0.1 miliseconds). We take a different approach, making all writes
+(&lt; 0.1 milliseconds). We take a different approach, making all writes
 asynchronous. This ensures that an accidentally-slow write cannot lock up the
-server. It adds latency to some reads, up to a hard maximum of 1 milisecond,
+server. It adds latency to some reads, up to a hard maximum of 1 millisecond,
 giving the effect of synchronous write whenever the write finishes fast.</li>
 </ul>
 <p>The release also includes one small new feature: in the threading client,
@@ -508,7 +530,7 @@ length, which was not correct.</li>
 <div class="section" id="v0-1-2-2018-08-31">
 <h2>v0.1.2 (2018-08-31)<a class="headerlink" href="#v0-1-2-2018-08-31" title="Permalink to this headline">¶</a></h2>
 <p>This is a bug-fix release fixing some critical bugs. We recommend that all
-users ugprade.</p>
+users upgrade.</p>
 <ul class="simple">
 <li>Fix critical typo in threading client’s search functionality that could cause
 it to conflate addresses from different search responses and then attempt to
