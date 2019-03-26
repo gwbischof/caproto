@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Shark (pcap/tcpdump parsing) &mdash; caproto 0.3.2 documentation</title>
+  <title>Shark (pcap/tcpdump parsing) &mdash; caproto 0.3.2+5.g03c8bcc documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.3.2+5.g03c8bcc
               </div>
             
           
@@ -97,7 +97,12 @@
 <li class="toctree-l1"><a class="reference internal" href="iocs.html">Input-Output Controllers (IOCs)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mock-records.html">Mock Records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="servers.html">Servers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Shark (pcap/tcpdump parsing)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Shark (pcap/tcpdump parsing)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#caproto-and-tcpdump">Caproto and tcpdump</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#why-not-just-use-wireshark">Why not just use wireshark?</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="loggers.html">Loggers</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Channel Access Sans I/O</span></p>
@@ -194,6 +199,8 @@ pip install caproto<span class="o">[</span>complete<span class="o">]</span>  <sp
 </pre></div>
 </div>
 </div>
+<div class="section" id="caproto-and-tcpdump">
+<h2>Caproto and tcpdump<a class="headerlink" href="#caproto-and-tcpdump" title="Permalink to this headline">¶</a></h2>
 <p>Capture network traffic to a using <code class="docutils literal notranslate"><span class="pre">tcpdump</span></code> like so:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo tcpdump -w some_network_traffic.pcap
 </pre></div>
@@ -245,11 +252,11 @@ optional arguments:
 </div>
 <p>Use this, for example, to stream <code class="docutils literal notranslate"><span class="pre">tcpdump</span></code> to the standard out, and pipe it
 to <code class="docutils literal notranslate"><span class="pre">caproto-shark</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo tcpdump -w - <span class="p">|</span> caproto-shark
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo tcpdump -U -w - <span class="p">|</span> caproto-shark
 </pre></div>
 </div>
 <p>Example output:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo tcpdump -w - <span class="p">|</span> caproto-shark
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo tcpdump -U -w - <span class="p">|</span> caproto-shark
 tcpdump: listening on wlp59s0, link-type EN10MB <span class="o">(</span>Ethernet<span class="o">)</span>, capture size <span class="m">262144</span> bytes
 <span class="m">1550679067</span>.619182 <span class="m">192</span>.168.86.21:55928-&gt;255.255.255.255:5065 RepeaterRegisterRequest<span class="o">(</span><span class="nv">client_address</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="o">)</span>
 <span class="m">1550679069</span>.309346 <span class="m">192</span>.168.86.21:55928-&gt;255.255.255.255:5064 VersionRequest<span class="o">(</span><span class="nv">priority</span><span class="o">=</span><span class="m">0</span>, <span class="nv">version</span><span class="o">=</span><span class="m">13</span><span class="o">)</span>
@@ -270,6 +277,39 @@ tcpdump: listening on wlp59s0, link-type EN10MB <span class="o">(</span>Ethernet
 <span class="m">1550679076</span>.427868 <span class="m">192</span>.168.86.21:57522-&gt;192.168.86.245:50421 ReadNotifyRequest<span class="o">(</span><span class="nv">data_type</span><span class="o">=</span>&lt;ChannelType.STRING: <span class="m">0</span>&gt;, <span class="nv">data_count</span><span class="o">=</span><span class="m">0</span>, <span class="nv">sid</span><span class="o">=</span><span class="m">1</span>, <span class="nv">ioid</span><span class="o">=</span><span class="m">0</span><span class="o">)</span>
 <span class="m">1550679076</span>.488508 <span class="m">192</span>.168.86.245:50421-&gt;192.168.86.21:57522 ReadNotifyResponse<span class="o">(</span><span class="nv">data</span><span class="o">=[</span>b<span class="s1">&#39;000000&#39;</span><span class="o">]</span>, <span class="nv">data_type</span><span class="o">=</span>&lt;ChannelType.STRING: <span class="m">0</span>&gt;, <span class="nv">data_count</span><span class="o">=</span><span class="m">1</span>, <span class="nv">status</span><span class="o">=</span>CAStatusCode<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;ECA_NORMAL&#39;</span>, <span class="nv">code</span><span class="o">=</span><span class="m">0</span>, <span class="nv">code_with_severity</span><span class="o">=</span><span class="m">1</span>, <span class="nv">severity</span><span class="o">=</span>&lt;CASeverity.SUCCESS: <span class="m">1</span>&gt;, <span class="nv">success</span><span class="o">=</span><span class="m">1</span>, <span class="nv">defunct</span><span class="o">=</span>False, <span class="nv">description</span><span class="o">=</span><span class="s1">&#39;Normal successful completion&#39;</span><span class="o">)</span>, <span class="nv">ioid</span><span class="o">=</span><span class="m">0</span>, <span class="nv">metadata</span><span class="o">=</span>None<span class="o">)</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p>The Windows program <a class="reference external" href="https://www.winpcap.org/windump/">WinDump</a> provides
+similar functionality to <code class="docutils literal notranslate"><span class="pre">tcpdump</span></code>. List the available network interfaces
+like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>WinDump.exe -D
+</pre></div>
+</div>
+<p>And then use it similarly to <code class="docutils literal notranslate"><span class="pre">tcpdump</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>WinDump.exe -i &lt;INTERFACE&gt; -U -w - <span class="p">|</span> caproto-shark
+</pre></div>
+</div>
+</div>
+<div class="section" id="why-not-just-use-wireshark">
+<h2>Why not just use wireshark?<a class="headerlink" href="#why-not-just-use-wireshark" title="Permalink to this headline">¶</a></h2>
+<p>There is already a
+<a class="reference external" href="https://github.com/mdavidsaver/cashark">wireshark plugin for CA</a>. In fact,
+we used it to help write caproto itself, and we have had a link to it in our
+<a class="reference internal" href="references.html"><span class="doc">References</span></a> section from the start. Who needs <code class="docutils literal notranslate"><span class="pre">caproto-shark</span></code>? There
+are situations where using wireshark is a better choice. However:</p>
+<ul class="simple">
+<li>Caproto’s implementation enables in-depth analysis of traffic in Python
+(making timing plots in Matplotlib, etc.)</li>
+<li>The output from <code class="docutils literal notranslate"><span class="pre">caproto-shark</span></code> is more descriptive in some areas as a
+natural consequence of reusing the same command objects that back caproto’s
+clients and servers.</li>
+<li>It’s handy to bundle pcap analysis with caproto—batteries included, nothing
+else to install.</li>
+<li>Since caproto already has all of the byte-parsing logic anyway, integrating
+with pcap streams only took a day or two of effort and ~300 lines of code.</li>
+</ul>
 </div>
 </div>
 
