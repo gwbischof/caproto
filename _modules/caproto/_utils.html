@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto._utils &mdash; caproto 0.3.2+10.g12cfe5c documentation</title>
+  <title>caproto._utils &mdash; caproto 0.3.2+14.gc7f88c8 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.3.2+10.g12cfe5c
+                0.3.2+14.gc7f88c8
               </div>
             
           
@@ -447,7 +447,10 @@
     <span class="n">addr_list</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;EPICS_CA_ADDR_LIST&#39;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">addr_list</span> <span class="ow">or</span> <span class="n">auto_addr_list</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;255.255.255.255&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">netifaces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">bcast</span> <span class="k">for</span> <span class="n">addr</span><span class="p">,</span> <span class="n">bcast</span> <span class="ow">in</span> <span class="n">get_netifaces_addresses</span><span class="p">()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;255.255.255.255&#39;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">addr_list</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
 
