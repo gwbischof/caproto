@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>caproto.threading.client &mdash; caproto 0.3.3+12.gbd21dc8 documentation</title>
+  <title>caproto.threading.client &mdash; caproto 0.3.3+15.g26ca0ce documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.3.3+12.gbd21dc8
+                0.3.3+15.g26ca0ce
               </div>
             
           
@@ -500,7 +500,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_search_now</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map name to (time, address)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map search id (cid) to [name, queue, retirement_deadline]</span>
+        <span class="c1"># map search id (cid) to [name, queue, last_search_time, retirement_deadline]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">server_protocol_versions</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># map address to protocol version</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_id_counter</span> <span class="o">=</span> <span class="n">ThreadsafeCounter</span><span class="p">(</span>
@@ -592,7 +593,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">udp_sock</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_close_event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_registration_last_sent</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_searching_enabled</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
@@ -626,7 +628,8 @@
 <div class="viewcode-block" id="SharedBroadcaster.get_cached_search_result"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.SharedBroadcaster.get_cached_search_result">[docs]</a>    <span class="k">def</span> <span class="nf">get_cached_search_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
                                  <span class="n">threshold</span><span class="o">=</span><span class="n">STALE_SEARCH_EXPIRATION</span><span class="p">):</span>
         <span class="s1">&#39;Returns address if found, raises KeyError if missing or stale.&#39;</span>
-        <span class="n">address</span><span class="p">,</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+            <span class="n">address</span><span class="p">,</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="c1"># this block of code is only to re-fresh the time found on</span>
         <span class="c1"># any PVs.  If we can find any context which has any circuit which</span>
         <span class="c1"># has any channel talking to this PV name then it is not stale so</span>
@@ -638,12 +641,14 @@
                     <span class="k">if</span> <span class="n">cm</span><span class="o">.</span><span class="n">connected</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cm</span><span class="o">.</span><span class="n">all_created_pvnames</span><span class="p">:</span>
                         <span class="c1"># A valid connection exists in one of our clients, so</span>
                         <span class="c1"># ignore the stale result status</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">())</span>
+                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">())</span>
                         <span class="c1"># TODO verify that addr matches address</span>
                         <span class="k">return</span> <span class="n">address</span>
 
-            <span class="c1"># Clean up expired result.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+                <span class="c1"># Clean up expired result.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">CaprotoKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{name!r}</span><span class="s1">: stale search result&#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">address</span></div>
@@ -696,7 +701,8 @@
                 <span class="n">search_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">search_id</span><span class="p">)</span>
                 <span class="c1"># The value is a list because we mutate it to update the</span>
                 <span class="c1"># retirement deadline sometimes.</span>
-                <span class="n">unanswered_searches</span><span class="p">[</span><span class="n">search_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">results_queue</span><span class="p">,</span> <span class="n">retirement_deadline</span><span class="p">]</span>
+                <span class="n">unanswered_searches</span><span class="p">[</span><span class="n">search_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">results_queue</span><span class="p">,</span>
+                                                  <span class="mi">0</span><span class="p">,</span> <span class="n">retirement_deadline</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_search_now</span><span class="o">.</span><span class="n">set</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SharedBroadcaster.cancel"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.SharedBroadcaster.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">names</span><span class="p">):</span>
@@ -802,7 +808,7 @@
                     <span class="n">cid</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">cid</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
-                            <span class="n">name</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">unanswered_searches</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+                            <span class="n">name</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">unanswered_searches</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
                     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                         <span class="c1"># This is a redundant response, which the EPICS</span>
                         <span class="c1"># spec tells us to ignore. (The first responder</span>
@@ -812,15 +818,16 @@
                         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
                             <span class="k">continue</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="p">:</span>
-                                <span class="n">accepted_address</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-                                <span class="n">new_address</span> <span class="o">=</span> <span class="n">ca</span><span class="o">.</span><span class="n">extract_address</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
-                                <span class="k">if</span> <span class="n">new_address</span> <span class="o">!=</span> <span class="n">accepted_address</span><span class="p">:</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                                        <span class="s2">&quot;PV </span><span class="si">%s</span><span class="s2"> with cid </span><span class="si">%d</span><span class="s2"> found on multiple &quot;</span>
-                                        <span class="s2">&quot;servers. Accepted address is </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">. &quot;</span>
-                                        <span class="s2">&quot;Also found on </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
-                                        <span class="n">name</span><span class="p">,</span> <span class="n">cid</span><span class="p">,</span> <span class="o">*</span><span class="n">accepted_address</span><span class="p">,</span> <span class="o">*</span><span class="n">new_address</span><span class="p">)</span>
+                            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">search_results</span><span class="p">:</span>
+                                    <span class="n">accepted_address</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+                                    <span class="n">new_address</span> <span class="o">=</span> <span class="n">ca</span><span class="o">.</span><span class="n">extract_address</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+                                    <span class="k">if</span> <span class="n">new_address</span> <span class="o">!=</span> <span class="n">accepted_address</span><span class="p">:</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                                            <span class="s2">&quot;PV </span><span class="si">%s</span><span class="s2"> with cid </span><span class="si">%d</span><span class="s2"> found on multiple &quot;</span>
+                                            <span class="s2">&quot;servers. Accepted address is </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">. &quot;</span>
+                                            <span class="s2">&quot;Also found on </span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
+                                            <span class="n">name</span><span class="p">,</span> <span class="n">cid</span><span class="p">,</span> <span class="o">*</span><span class="n">accepted_address</span><span class="p">,</span> <span class="o">*</span><span class="n">new_address</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">results_by_cid</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">cid</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
                         <span class="n">address</span> <span class="o">=</span> <span class="n">ca</span><span class="o">.</span><span class="n">extract_address</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
@@ -828,7 +835,8 @@
                         <span class="c1"># Cache this to save time on future searches.</span>
                         <span class="c1"># (Entries expire after STALE_SEARCH_EXPIRATION.)</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Found </span><span class="si">%s</span><span class="s1"> at </span><span class="si">%s</span><span class="s1">:</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">address</span><span class="p">)</span>
-                        <span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+                        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+                            <span class="n">search_results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
                         <span class="n">server_protocol_versions</span><span class="p">[</span><span class="n">address</span><span class="p">]</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">version</span>
             <span class="c1"># Send the search results to the Contexts that asked for</span>
             <span class="c1"># them. This is probably more general than is has to be but</span>
@@ -845,6 +853,7 @@
         <span class="n">retirement_deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="n">SEARCH_RETIREMENT_AGE</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="c1"># give new age-out deadline</span>
                 <span class="n">item</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">retirement_deadline</span>
 
 <div class="viewcode-block" id="SharedBroadcaster.time_since_last_heard"><a class="viewcode-back" href="../../../threading-client.html#caproto.threading.client.SharedBroadcaster.time_since_last_heard">[docs]</a>    <span class="k">def</span> <span class="nf">time_since_last_heard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -993,6 +1002,8 @@
                 <span class="k">for</span> <span class="n">search_id</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="n">ca</span><span class="o">.</span><span class="n">SearchRequest</span><span class="p">(</span><span class="n">it</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">search_id</span><span class="p">,</span>
                                            <span class="n">ca</span><span class="o">.</span><span class="n">DEFAULT_PROTOCOL_VERSION</span><span class="p">)</span>
+                    <span class="c1"># reset the last time this was sent</span>
+                    <span class="n">it</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
 
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">time_to_check_on_retirees</span><span class="p">:</span>
@@ -1004,6 +1015,10 @@
                     <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">((</span><span class="n">search_id</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span>
                                  <span class="k">for</span> <span class="n">search_id</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unanswered_searches</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
                                  <span class="k">if</span> <span class="p">(</span><span class="n">it</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">))</span>
+
+            <span class="c1"># only send requests who we last sent at least interval in the past</span>
+            <span class="n">resend_deadline</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="n">interval</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[(</span><span class="n">sid</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">sid</span><span class="p">,</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">it</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">resend_deadline</span><span class="p">]</span>
             <span class="n">requests</span> <span class="o">=</span> <span class="n">_construct_search_requests</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_searching_enabled</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
@@ -1206,7 +1221,8 @@
             <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">key</span>
             <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="c1"># If there is a cached search result for this name, expire it.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
             <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">pv_cache_lock</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pvs_needing_circuits</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span>
 
@@ -1606,6 +1622,10 @@
             <span class="n">event</span> <span class="o">=</span> <span class="n">ioid_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;event&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">_search_lock</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_created_pvnames</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">broadcaster</span><span class="o">.</span><span class="n">search_results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">all_created_pvnames</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">pv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pvs</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
