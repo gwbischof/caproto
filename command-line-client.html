@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Command-Line Client &mdash; caproto 0.3.3+2.g0584400 documentation</title>
+  <title>Command-Line Client &mdash; caproto 0.3.3+12.gbd21dc8 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.3.3+2.g0584400
+                0.3.3+12.gbd21dc8
               </div>
             
           
@@ -90,7 +90,10 @@
 <p class="caption"><span class="caption-text">EPICS Clients and Servers</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Command-Line Client</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#output-formatting-options">Output Formatting Options</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#api-documentation">API Documentation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#caproto-get">caproto-get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#caproto-put">caproto-put</a></li>
@@ -392,6 +395,89 @@ and <code class="docutils literal notranslate"><span class="pre">{timedelta}</sp
 </pre></div>
 </div>
 <p>For additional options, type <code class="docutils literal notranslate"><span class="pre">caproto-monitor</span> <span class="pre">-h</span></code> or see below.</p>
+<div class="section" id="output-formatting-options">
+<h3>Output Formatting Options<a class="headerlink" href="#output-formatting-options" title="Permalink to this headline">¶</a></h3>
+<p>Output formatting options are changing the default format used in
+<code class="docutils literal notranslate"><span class="pre">caproto-get</span></code> and <code class="docutils literal notranslate"><span class="pre">caproto-monitor</span></code> for printing PV values.
+The default formatting is used in the following cases:</p>
+<ul class="simple">
+<li>The format string (<code class="docutils literal notranslate"><span class="pre">--format</span></code> argument) is not specified.</li>
+<li>The format string contains the field <code class="docutils literal notranslate"><span class="pre">{response.data}</span></code>. In this case
+formatting is applied only to the field <code class="docutils literal notranslate"><span class="pre">{response.data}</span></code>.</li>
+</ul>
+<p>Formatting options applied to <strong>floating point PV values</strong>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;nr&gt;</span></code> - use %e format with precision of <code class="docutils literal notranslate"><span class="pre">&lt;nr&gt;</span></code> digits (e.g. <code class="docutils literal notranslate"><span class="pre">-e5</span></code> or <code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">5</span></code>);</li>
+<li><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">&lt;nr&gt;</span></code> - use %f format with precision of <code class="docutils literal notranslate"><span class="pre">&lt;nr&gt;</span></code> digits (e.g. <code class="docutils literal notranslate"><span class="pre">-f5</span></code> or <code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">5</span></code>);</li>
+<li><code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;nr&gt;</span></code> - use %g format with precision of <code class="docutils literal notranslate"><span class="pre">&lt;nr&gt;</span></code> digits (e.g. <code class="docutils literal notranslate"><span class="pre">-g5</span></code> or <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">5</span></code>);</li>
+<li><code class="docutils literal notranslate"><span class="pre">-s</span></code> - get value as string (honors server-side precision);</li>
+<li><code class="docutils literal notranslate"><span class="pre">-lx</span></code> - round to long integer and print as hex number;</li>
+<li><code class="docutils literal notranslate"><span class="pre">-lo</span></code> - round to long integer and print as octal number;</li>
+<li><code class="docutils literal notranslate"><span class="pre">-lb</span></code> - round to long integer and print as binary number.</li>
+</ul>
+<p>Formatting options applied to <strong>integer PV values</strong>:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">-0x</span></code> - print as hex number;</li>
+<li><code class="docutils literal notranslate"><span class="pre">-0o</span></code> - print as octal number;</li>
+<li><code class="docutils literal notranslate"><span class="pre">-0b</span></code> - print as binary number.</li>
+</ul>
+<p>The argument <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">&lt;ofs&gt;</span></code> replaces the default field separator (spaces) with alternate
+separator <code class="docutils literal notranslate"><span class="pre">&lt;ofs&gt;</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">-F*</span></code>, <code class="docutils literal notranslate"><span class="pre">-F'*'</span></code>, <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">'*'</span></code>, <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">'</span> <span class="pre">**</span> <span class="pre">'</span></code>).</p>
+<p>Some examples of output formatting:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ caproto-monitor random_walk:x -g10
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:45.159667 <span class="o">[</span>-165.3895284<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:46.160722 <span class="o">[</span>-164.5046121<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:47.162351 <span class="o">[</span>-163.5463466<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:48.164604 <span class="o">[</span>-164.0319457<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:49.166856 <span class="o">[</span>-163.1483927<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:50.169072 <span class="o">[</span>-163.9358578<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:51.171294 <span class="o">[</span>-163.4155186<span class="o">]</span>
+random_walk:x                             <span class="m">2019</span>-04-11 <span class="m">20</span>:12:52.173604 <span class="o">[</span>-162.6590992<span class="o">]</span>
+^C
+
+$ caproto-monitor random_walk:x -g10 -F<span class="s2">&quot;  ==  &quot;</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:41.297880  <span class="o">==</span>  <span class="o">[</span>-3.811720948<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:42.298818  <span class="o">==</span>  <span class="o">[</span>-3.162919537<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:43.301088  <span class="o">==</span>  <span class="o">[</span>-3.432931988<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:44.303375  <span class="o">==</span>  <span class="o">[</span>-2.787768272<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:45.305699  <span class="o">==</span>  <span class="o">[</span>-2.024880621<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:46.307986  <span class="o">==</span>  <span class="o">[</span>-1.765013774<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:47.310276  <span class="o">==</span>  <span class="o">[</span>-1.45201324<span class="o">]</span>
+random_walk:x  <span class="o">==</span>  <span class="m">2019</span>-04-11 <span class="m">20</span>:14:48.312575  <span class="o">==</span>  <span class="o">[</span>-0.9904703683<span class="o">]</span>
+^C
+
+$ caproto-monitor random_walk:x -e5 --format <span class="s2">&quot;{timedelta} {response.data}&quot;</span>
+<span class="m">0</span>:00:00.561498 <span class="o">[</span>-6.09173e+00<span class="o">]</span>
+<span class="m">0</span>:00:01.001148 <span class="o">[</span>-5.15495e+00<span class="o">]</span>
+<span class="m">0</span>:00:01.002169 <span class="o">[</span>-5.64561e+00<span class="o">]</span>
+<span class="m">0</span>:00:01.002267 <span class="o">[</span>-6.01321e+00<span class="o">]</span>
+<span class="m">0</span>:00:01.002256 <span class="o">[</span>-5.18551e+00<span class="o">]</span>
+<span class="m">0</span>:00:01.002254 <span class="o">[</span>-4.88171e+00<span class="o">]</span>
+<span class="m">0</span>:00:01.000546 <span class="o">[</span>-4.47361e+00<span class="o">]</span>
+^C
+
+$ caproto-monitor random_walk:x -f3 -F <span class="s1">&#39; ** &#39;</span> --format <span class="s2">&quot;{timedelta} {response.data}&quot;</span>
+<span class="m">0</span>:00:00.115265 ** <span class="o">[</span><span class="m">53</span>.291<span class="o">]</span>
+<span class="m">0</span>:00:01.002170 ** <span class="o">[</span><span class="m">53</span>.597<span class="o">]</span>
+<span class="m">0</span>:00:01.002251 ** <span class="o">[</span><span class="m">54</span>.536<span class="o">]</span>
+<span class="m">0</span>:00:01.002267 ** <span class="o">[</span><span class="m">54</span>.469<span class="o">]</span>
+<span class="m">0</span>:00:01.002254 ** <span class="o">[</span><span class="m">53</span>.827<span class="o">]</span>
+<span class="m">0</span>:00:01.002264 ** <span class="o">[</span><span class="m">53</span>.000<span class="o">]</span>
+<span class="m">0</span>:00:01.001584 ** <span class="o">[</span><span class="m">52</span>.160<span class="o">]</span>
+^C
+
+$ caproto-monitor random_walk:x -lx -F <span class="s1">&#39; ** &#39;</span> --format <span class="s2">&quot;{timedelta} {response.data}&quot;</span>
+<span class="m">0</span>:00:00.953373 ** <span class="o">[</span>0x2D<span class="o">]</span>
+<span class="m">0</span>:00:01.000445 ** <span class="o">[</span>0x2D<span class="o">]</span>
+<span class="m">0</span>:00:01.001918 ** <span class="o">[</span>0x2E<span class="o">]</span>
+<span class="m">0</span>:00:01.002289 ** <span class="o">[</span>0x2E<span class="o">]</span>
+<span class="m">0</span>:00:01.002199 ** <span class="o">[</span>0x2D<span class="o">]</span>
+<span class="m">0</span>:00:01.002327 ** <span class="o">[</span>0x2D<span class="o">]</span>
+<span class="m">0</span>:00:01.001610 ** <span class="o">[</span>0x2C<span class="o">]</span>
+^C
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="api-documentation">
 <h2>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h2>
@@ -406,10 +492,12 @@ functionality is available via <code class="docutils literal notranslate"><span 
 <h3>caproto-get<a class="headerlink" href="#caproto-get" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ caproto-get -h
 usage: caproto-get <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--verbose<span class="o">]</span> <span class="o">[</span>--format FORMAT<span class="o">]</span> <span class="o">[</span>--timeout TIMEOUT<span class="o">]</span>
-               <span class="o">[</span>--notify<span class="o">]</span> <span class="o">[</span>--priority PRIORITY<span class="o">]</span> <span class="o">[</span>--terse<span class="o">]</span> <span class="o">[</span>--wide<span class="o">]</span>
-               <span class="o">[</span>-d DATA_TYPE<span class="o">]</span> <span class="o">[</span>--list-types<span class="o">]</span> <span class="o">[</span>-n<span class="o">]</span> <span class="o">[</span>--no-color<span class="o">]</span>
-               <span class="o">[</span>--no-repeater<span class="o">]</span>
-               pv_names <span class="o">[</span>pv_names ...<span class="o">]</span>
+                <span class="o">[</span>--notify<span class="o">]</span> <span class="o">[</span>--priority PRIORITY<span class="o">]</span>
+                <span class="o">[</span>--terse <span class="p">|</span> --wide <span class="p">|</span> -d DATA_TYPE<span class="o">]</span> <span class="o">[</span>--list-types<span class="o">]</span> <span class="o">[</span>-n<span class="o">]</span>
+                <span class="o">[</span>--no-color<span class="o">]</span> <span class="o">[</span>--no-repeater<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">[</span>-e &lt;nr&gt;<span class="o">]</span>
+                <span class="o">[</span>-f &lt;nr&gt;<span class="o">]</span> <span class="o">[</span>-g &lt;nr&gt;<span class="o">]</span> <span class="o">[</span>-s<span class="o">]</span> <span class="o">[</span>-lx<span class="o">]</span> <span class="o">[</span>-lo<span class="o">]</span> <span class="o">[</span>-lb<span class="o">]</span> <span class="o">[</span>-0x<span class="o">]</span> <span class="o">[</span>-0o<span class="o">]</span>
+                <span class="o">[</span>-0b<span class="o">]</span> <span class="o">[</span>-F &lt;ofs&gt;<span class="o">]</span>
+                pv_names <span class="o">[</span>pv_names ...<span class="o">]</span>
 
 Read the value of a PV.
 
@@ -422,7 +510,9 @@ optional arguments:
 --format FORMAT       Python format string. Available tokens are <span class="o">{</span>pv_name<span class="o">}</span>
                         and <span class="o">{</span>response<span class="o">}</span>. Additionally, <span class="k">if</span> this data <span class="nb">type</span>
                         includes time, <span class="o">{</span>timestamp<span class="o">}</span> and usages like
-                        <span class="o">{</span>timestamp:%Y-%m-%d %H:%M:%S<span class="o">}</span> are supported.
+                        <span class="o">{</span>timestamp:%Y-%m-%d %H:%M:%S<span class="o">}</span> are supported. If the
+                        format string is specified, --terse and --wide options
+                        have no effect on the output formatting.
 --timeout TIMEOUT, -w TIMEOUT
                         Timeout <span class="o">(</span><span class="s1">&#39;wait&#39;</span><span class="o">)</span> in seconds <span class="k">for</span> server responses.
 --notify, -c          This is a vestigial argument that now has no effect in
@@ -442,6 +532,36 @@ optional arguments:
 -n                    Retrieve enums as integers <span class="o">(</span>default is strings<span class="o">)</span>.
 --no-color            Suppress ANSI color codes in log messages.
 --no-repeater         Do not spawn a Channel Access repeater daemon process.
+--version, -V         Show caproto version and exit.
+
+Floating point <span class="nb">type</span> format:
+If --format is set, the following arguments change formatting of the
+<span class="o">{</span>response.data<span class="o">}</span> field <span class="k">if</span> floating point value is displayed. The default
+format is %g.
+
+-e &lt;nr&gt;               Use %e format with precision of &lt;nr&gt; digits <span class="o">(</span>e.g. -e5
+                        or -e <span class="m">5</span><span class="o">)</span>
+-f &lt;nr&gt;               Use %f format with precision of &lt;nr&gt; digits <span class="o">(</span>e.g. -f5
+                        or -f <span class="m">5</span><span class="o">)</span>
+-g &lt;nr&gt;               Use %g format with precision of &lt;nr&gt; digits <span class="o">(</span>e.g. -g5
+                        or -g <span class="m">5</span><span class="o">)</span>
+-s                    Get value as string <span class="o">(</span>honors server-side precision<span class="o">)</span>
+-lx                   Round to long integer and print as hex number
+-lo                   Round to long integer and print as octal number
+-lb                   Round to long integer and print as binary number
+
+Integer number format:
+If --format is set, the following arguments change formatting of the
+<span class="o">{</span>response.data<span class="o">}</span> field <span class="k">if</span> integer value is displayed. Decimal number is
+displayed by default.
+
+-0x                   Print as hex number
+-0o                   Print as octal number
+-0b                   Print as binary number
+
+Custom output field separator:
+-F &lt;ofs&gt;              Use &lt;ofs&gt; as an alternate output field separator <span class="o">(</span>e.g.
+                        -F*, -F<span class="s1">&#39;*&#39;</span>, -F <span class="s1">&#39;*&#39;</span>, -F <span class="s1">&#39; ** &#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
@@ -489,10 +609,12 @@ optional arguments:
 <h3>caproto-monitor<a class="headerlink" href="#caproto-monitor" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ caproto-monitor -h
 usage: caproto-monitor <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--format FORMAT<span class="o">]</span> <span class="o">[</span>--verbose<span class="o">]</span>
-                   <span class="o">[</span>--duration DURATION <span class="p">|</span> --maximum MAXIMUM<span class="o">]</span>
-                   <span class="o">[</span>--timeout TIMEOUT<span class="o">]</span> <span class="o">[</span>-m MASK<span class="o">]</span> <span class="o">[</span>--priority PRIORITY<span class="o">]</span>
-                   <span class="o">[</span>-n<span class="o">]</span> <span class="o">[</span>--no-color<span class="o">]</span> <span class="o">[</span>--no-repeater<span class="o">]</span>
-                   pv_names <span class="o">[</span>pv_names ...<span class="o">]</span>
+                    <span class="o">[</span>--duration DURATION <span class="p">|</span> --maximum MAXIMUM<span class="o">]</span>
+                    <span class="o">[</span>--timeout TIMEOUT<span class="o">]</span> <span class="o">[</span>-m MASK<span class="o">]</span> <span class="o">[</span>--priority PRIORITY<span class="o">]</span>
+                    <span class="o">[</span>-n<span class="o">]</span> <span class="o">[</span>--no-color<span class="o">]</span> <span class="o">[</span>--no-repeater<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span> <span class="o">[</span>-e &lt;nr&gt;<span class="o">]</span>
+                    <span class="o">[</span>-f &lt;nr&gt;<span class="o">]</span> <span class="o">[</span>-g &lt;nr&gt;<span class="o">]</span> <span class="o">[</span>-s<span class="o">]</span> <span class="o">[</span>-lx<span class="o">]</span> <span class="o">[</span>-lo<span class="o">]</span> <span class="o">[</span>-lb<span class="o">]</span> <span class="o">[</span>-0x<span class="o">]</span> <span class="o">[</span>-0o<span class="o">]</span>
+                    <span class="o">[</span>-0b<span class="o">]</span> <span class="o">[</span>-F &lt;ofs&gt;<span class="o">]</span>
+                    pv_names <span class="o">[</span>pv_names ...<span class="o">]</span>
 
 Read the value of a PV.
 
@@ -522,6 +644,36 @@ optional arguments:
 -n                    Retrieve enums as integers <span class="o">(</span>default is strings<span class="o">)</span>.
 --no-color            Suppress ANSI color codes in log messages.
 --no-repeater         Do not spawn a Channel Access repeater daemon process.
+--version, -V         Show caproto version and exit.
+
+Floating point <span class="nb">type</span> format:
+If --format is set, the following arguments change formatting of the
+<span class="o">{</span>response.data<span class="o">}</span> field <span class="k">if</span> floating point value is displayed. The default
+format is %g.
+
+-e &lt;nr&gt;               Use %e format with precision of &lt;nr&gt; digits <span class="o">(</span>e.g. -e5
+                        or -e <span class="m">5</span><span class="o">)</span>
+-f &lt;nr&gt;               Use %f format with precision of &lt;nr&gt; digits <span class="o">(</span>e.g. -f5
+                        or -f <span class="m">5</span><span class="o">)</span>
+-g &lt;nr&gt;               Use %g format with precision of &lt;nr&gt; digits <span class="o">(</span>e.g. -g5
+                        or -g <span class="m">5</span><span class="o">)</span>
+-s                    Get value as string <span class="o">(</span>honors server-side precision<span class="o">)</span>
+-lx                   Round to long integer and print as hex number
+-lo                   Round to long integer and print as octal number
+-lb                   Round to long integer and print as binary number
+
+Integer number format:
+If --format is set, the following arguments change formatting of the
+<span class="o">{</span>response.data<span class="o">}</span> field <span class="k">if</span> integer value is displayed. Decimal number is
+displayed by default.
+
+-0x                   Print as hex number
+-0o                   Print as octal number
+-0b                   Print as binary number
+
+Custom output field separator:
+-F &lt;ofs&gt;              Use &lt;ofs&gt; as an alternate output field separator <span class="o">(</span>e.g.
+                        -F*, -F<span class="s1">&#39;*&#39;</span>, -F <span class="s1">&#39;*&#39;</span>, -F <span class="s1">&#39; ** &#39;</span><span class="o">)</span>
 </pre></div>
 </div>
 </div>
