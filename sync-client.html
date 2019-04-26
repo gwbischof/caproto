@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Synchronous Client &mdash; caproto 0.3.3+18.g60327cd documentation</title>
+  <title>Synchronous Client &mdash; caproto 0.3.3+20.g6522f64 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.3.3+18.g60327cd
+                0.3.3+20.g6522f64
               </div>
             
           
@@ -230,7 +230,7 @@ data structures.</p>
 <span class="gh">Out[6]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=0)</span>
 
 <span class="gp">In [7]: </span><span class="n">res</span><span class="o">.</span><span class="n">buffers</span>  <span class="c1"># a collection of one or more buffers</span>
-<span class="go">                                                                                                         Out[7]: (b&#39;&#39;, &lt;memory at 0x7f6e2a570108&gt;)</span>
+<span class="go">                                                                                                         Out[7]: (b&#39;&#39;, &lt;memory at 0x7fa111d3d1c8&gt;)</span>
 </pre></div>
 </div>
 <p class="last">They were received directly from the socket into these structure with no
@@ -653,9 +653,9 @@ clients should do this.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>initial, write_response, final</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple of response</span></dt>
 <dd></dd>
-<dt><strong>The middle response comes from the write, and it will be ``None`` unless</strong></dt>
+<dt>The middle response comes from the write, and it will be <code class="docutils literal notranslate"><span class="pre">None</span></code> unless</dt>
 <dd></dd>
-<dt><strong>``notify=True``.</strong></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">notify=True</span></code>.</dt>
 <dd></dd>
 </dl>
 </td>
@@ -680,7 +680,7 @@ clients should do this.</p>
 <p>See the <a class="reference internal" href="#caproto.sync.client.subscribe" title="caproto.sync.client.subscribe"><code class="xref py py-func docutils literal notranslate"><span class="pre">subscribe()</span></code></a> function.</p>
 <dl class="method">
 <dt id="caproto.sync.client.Subscription.add_callback">
-<code class="descname">add_callback</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.add_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.add_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_callback</code><span class="sig-paren">(</span><em>self</em>, <em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.add_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.add_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a callback to receive responses.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -706,7 +706,7 @@ clients should do this.</p>
 
 <dl class="method">
 <dt id="caproto.sync.client.Subscription.block">
-<code class="descname">block</code><span class="sig-paren">(</span><em>duration=None</em>, <em>timeout=1</em>, <em>force_int_enums=False</em>, <em>repeater=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.block" title="Permalink to this definition">¶</a></dt>
+<code class="descname">block</code><span class="sig-paren">(</span><em>self</em>, <em>duration=None</em>, <em>timeout=1</em>, <em>force_int_enums=False</em>, <em>repeater=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activate one or more subscriptions and process incoming responses.</p>
 <p>Use Ctrl+C (SIGINT) to escape, or from another thread, call
 <a class="reference internal" href="#caproto.sync.client.interrupt" title="caproto.sync.client.interrupt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">interrupt()</span></code></a>.</p>
@@ -741,13 +741,13 @@ well-behaved clients should do this.</p>
 
 <dl class="method">
 <dt id="caproto.sync.client.Subscription.clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove all callbacks. If currently blocking, interrupt.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.sync.client.Subscription.interrupt">
-<code class="descname">interrupt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.interrupt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.interrupt" title="Permalink to this definition">¶</a></dt>
+<code class="descname">interrupt</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.interrupt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.interrupt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Signal to block() to stop blocking. Idempotent.</p>
 <p>This obviously cannot be called interactively while blocked;
 it is intended to be called from another thread.
@@ -757,7 +757,7 @@ This method is a convenience alias for the top-level function
 
 <dl class="method">
 <dt id="caproto.sync.client.Subscription.process">
-<code class="descname">process</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.process" title="Permalink to this definition">¶</a></dt>
+<code class="descname">process</code><span class="sig-paren">(</span><em>self</em>, <em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the callbacks on a response.</p>
 <p>This is used internally by <a class="reference internal" href="#caproto.sync.client.block" title="caproto.sync.client.block"><code class="xref py py-func docutils literal notranslate"><span class="pre">block()</span></code></a>, generally not called by the
 user.</p>
@@ -765,7 +765,7 @@ user.</p>
 
 <dl class="method">
 <dt id="caproto.sync.client.Subscription.remove_callback">
-<code class="descname">remove_callback</code><span class="sig-paren">(</span><em>cb_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.remove_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.remove_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_callback</code><span class="sig-paren">(</span><em>self</em>, <em>cb_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/sync/client.html#Subscription.remove_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.sync.client.Subscription.remove_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove callback using token that was returned by <a class="reference internal" href="#caproto.sync.client.Subscription.add_callback" title="caproto.sync.client.Subscription.add_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_callback()</span></code></a>.</p>
 </dd></dl>
 

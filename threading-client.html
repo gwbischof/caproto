@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Threading Client &mdash; caproto 0.3.3+18.g60327cd documentation</title>
+  <title>Threading Client &mdash; caproto 0.3.3+20.g6522f64 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.3.3+18.g60327cd
+                0.3.3+20.g6522f64
               </div>
             
           
@@ -262,7 +262,7 @@ data structures.</p>
 <span class="gh">Out[10]: </span><span class="go">MessageHeader(command=15, payload_size=8, data_type=6, data_count=1, parameter1=1, parameter2=0)</span>
 
 <span class="gp">In [11]: </span><span class="n">res</span><span class="o">.</span><span class="n">buffers</span>  <span class="c1"># a collection of one or more buffers</span>
-<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7f6e2a3f5048&gt;)</span>
+<span class="go">                                                                                                          Out[11]: (b&#39;&#39;, &lt;memory at 0x7fa111d3df48&gt;)</span>
 </pre></div>
 </div>
 <p class="last">They were received directly from the socket into these structure with no
@@ -346,12 +346,12 @@ define a second callback:</p>
 
 <span class="gp">In [21]: </span><span class="n">values</span>
 <span class="go">           Out[21]: </span>
-<span class="go">[-0.2849482130671597,</span>
-<span class="go"> -0.04837888961717307,</span>
-<span class="go"> -0.6238480233371959,</span>
-<span class="go"> -0.9211689370247569,</span>
-<span class="go"> -0.3418395309937545,</span>
-<span class="go"> -0.17797845157094927]</span>
+<span class="go">[0.22521009337243614,</span>
+<span class="go"> 1.0609819415976633,</span>
+<span class="go"> 1.1738033411019453,</span>
+<span class="go"> 1.499399481159812,</span>
+<span class="go"> 1.1452872571173196,</span>
+<span class="go"> 1.2171228626839592]</span>
 </pre></div>
 </div>
 <p>At any point we can remove a specific callback function:</p>
@@ -430,7 +430,7 @@ upon exiting the <code class="docutils literal notranslate"><span class="pre">wi
 background thread. As the responses come in, the <code class="docutils literal notranslate"><span class="pre">results</span></code> dictionary will be
 updated.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [30]: </span><span class="n">results</span>
-<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([-0.17797845]), &#39;random_walk:dt&#39;: array([1.])}</span>
+<span class="gh">Out[30]: </span><span class="go">{&#39;random_walk:x&#39;: array([1.21712286]), &#39;random_walk:dt&#39;: array([1.])}</span>
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="#caproto.threading.client.Batch" title="caproto.threading.client.Batch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Batch</span></code></a> for more.</p>
@@ -443,7 +443,7 @@ requested. In order to reduce the load on the network, a PV can be temporarily
 made “idle” (disconnected). It will silently, automatically reconnect the next
 time it is used.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="n">x</span>
-<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 55176), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="gh">Out[31]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 59461), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 
 <span class="gp">In [32]: </span><span class="n">x</span><span class="o">.</span><span class="n">go_idle</span><span class="p">()</span>
 
@@ -451,10 +451,10 @@ time it is used.</p>
 <span class="gh">Out[33]: </span><span class="go">&lt;PV name=&#39;random_walk:x&#39; priority=0 (idle)&gt;</span>
 
 <span class="gp">In [34]: </span><span class="n">x</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([0.67961659]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
+<span class="go">                                                     Out[34]: ReadNotifyResponse(data=array([1.1610539]), data_type=&lt;ChannelType.DOUBLE: 6&gt;, data_count=1, status=CAStatusCode(name=&#39;ECA_NORMAL&#39;, code=0, code_with_severity=1, severity=&lt;CASeverity.SUCCESS: 1&gt;, success=1, defunct=False, description=&#39;Normal successful completion&#39;), ioid=4, metadata=None)</span>
 
 <span class="gp">In [35]: </span><span class="n">x</span>
-<span class="go">                                                                                                                                                                                                                                                                                                                                                                 Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 55176), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
+<span class="go">                                                                                                                                                                                                                                                                                                                                                                Out[35]: &lt;PV name=&#39;random_walk:x&#39; priority=0 address=(&#39;127.0.0.1&#39;, 59461), circuit_state=States.CONNECTED, channel_state=States.CONNECTED&gt;</span>
 </pre></div>
 </div>
 <p>Notice that when the PV was read it automatically reconnected, requiring no
@@ -589,7 +589,7 @@ value from 1.</p>
 </table>
 <dl class="method">
 <dt id="caproto.threading.client.Context.get_pvs">
-<code class="descname">get_pvs</code><span class="sig-paren">(</span><em>*names</em>, <em>priority=0</em>, <em>connection_state_callback=None</em>, <em>access_rights_callback=None</em>, <em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Context.get_pvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Context.get_pvs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_pvs</code><span class="sig-paren">(</span><em>self</em>, <em>*names</em>, <em>priority=0</em>, <em>connection_state_callback=None</em>, <em>access_rights_callback=None</em>, <em>timeout=&lt;object object at 0x7fa1213177a0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Context.get_pvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Context.get_pvs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of PV objects.</p>
 <p>These objects may not be connected at first. Channel creation occurs on
 a background thread.</p>
@@ -644,7 +644,7 @@ should be created by calling the <code class="docutils literal notranslate"><spa
 object.</p>
 <dl class="method">
 <dt id="caproto.threading.client.PV.go_idle">
-<code class="descname">go_idle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.go_idle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.go_idle" title="Permalink to this definition">¶</a></dt>
+<code class="descname">go_idle</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.go_idle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.go_idle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request to clear this Channel to reduce load on client and server.</p>
 <p>A new Channel will be automatically, silently created the next time any
 method requiring a connection is called. Thus, this saves some memory
@@ -658,7 +658,7 @@ request will be processed when they are complete.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>*</em>, <em>wait=True</em>, <em>callback=None</em>, <em>timeout=&lt;object object&gt;</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>notify=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>self</em>, <em>*</em>, <em>wait=True</em>, <em>callback=None</em>, <em>timeout=&lt;object object at 0x7fa1213178d0&gt;</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>notify=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request a fresh reading.</p>
 <p>Can do one or both of:
 - Block while waiting for the response, and return it.
@@ -703,7 +703,7 @@ default.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.subscribe">
-<code class="descname">subscribe</code><span class="sig-paren">(</span><em>data_type=None</em>, <em>data_count=None</em>, <em>low=0.0</em>, <em>high=0.0</em>, <em>to=0.0</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.subscribe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">subscribe</code><span class="sig-paren">(</span><em>self</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>low=0.0</em>, <em>high=0.0</em>, <em>to=0.0</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.subscribe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start a new subscription to which user callback may be added.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -755,7 +755,7 @@ is added.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.time_since_last_heard">
-<code class="descname">time_since_last_heard</code><span class="sig-paren">(</span><em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.time_since_last_heard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.time_since_last_heard" title="Permalink to this definition">¶</a></dt>
+<code class="descname">time_since_last_heard</code><span class="sig-paren">(</span><em>self</em>, <em>timeout=&lt;object object at 0x7fa1213178d0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.time_since_last_heard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.time_since_last_heard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Seconds since last message from the server that provides this channel.</p>
 <p>The time is reset to 0 whenever we receive a TCP message related to
 user activity <em>or</em> a Beacon. Servers are expected to send Beacons at
@@ -797,13 +797,13 @@ set. If None, never timeout.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.unsubscribe_all">
-<code class="descname">unsubscribe_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.unsubscribe_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.unsubscribe_all" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unsubscribe_all</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.unsubscribe_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.unsubscribe_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear all subscriptions. (Remove all user callbacks from them.)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.wait_for_connection">
-<code class="descname">wait_for_connection</code><span class="sig-paren">(</span><em>*</em>, <em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.wait_for_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.wait_for_connection" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait_for_connection</code><span class="sig-paren">(</span><em>self</em>, <em>*</em>, <em>timeout=&lt;object object at 0x7fa1213178d0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.wait_for_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.wait_for_connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for this PV to be connected.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -824,7 +824,7 @@ set. If None, never timeout.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.wait_for_search">
-<code class="descname">wait_for_search</code><span class="sig-paren">(</span><em>*</em>, <em>timeout=&lt;object object&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.wait_for_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.wait_for_search" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wait_for_search</code><span class="sig-paren">(</span><em>self</em>, <em>*</em>, <em>timeout=&lt;object object at 0x7fa1213178d0&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.wait_for_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.wait_for_search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wait for this PV to be found.</p>
 <p>This does not wait for the PV’s Channel to be created; it merely waits
 for an address (and a VirtualCircuit) to be assigned.</p>
@@ -847,7 +847,7 @@ None, never timeout.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.PV.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>data</em>, <em>*</em>, <em>wait=True</em>, <em>callback=None</em>, <em>timeout=&lt;object object&gt;</em>, <em>notify=None</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write</code><span class="sig-paren">(</span><em>self</em>, <em>data</em>, <em>*</em>, <em>wait=True</em>, <em>callback=None</em>, <em>timeout=&lt;object object at 0x7fa1213178d0&gt;</em>, <em>notify=None</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#PV.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.PV.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a new value. Optionally, request confirmation from the server.</p>
 <p>Can do one or both of:
 - Block while waiting for the response, and return it.
@@ -906,7 +906,7 @@ functions.</p>
 it should be made by calling the <code class="docutils literal notranslate"><span class="pre">subscribe()</span></code> method on a <code class="docutils literal notranslate"><span class="pre">PV</span></code> object.</p>
 <dl class="method">
 <dt id="caproto.threading.client.Subscription.add_callback">
-<code class="descname">add_callback</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Subscription.add_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Subscription.add_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_callback</code><span class="sig-paren">(</span><em>self</em>, <em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Subscription.add_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Subscription.add_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a callback to receive responses.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -932,13 +932,13 @@ it should be made by calling the <code class="docutils literal notranslate"><spa
 
 <dl class="method">
 <dt id="caproto.threading.client.Subscription.clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Subscription.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Subscription.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Subscription.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Subscription.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove all callbacks.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.threading.client.Subscription.remove_callback">
-<code class="descname">remove_callback</code><span class="sig-paren">(</span><em>token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Subscription.remove_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Subscription.remove_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_callback</code><span class="sig-paren">(</span><em>self</em>, <em>token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Subscription.remove_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Subscription.remove_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove callback using token that was returned by <a class="reference internal" href="#caproto.threading.client.Subscription.add_callback" title="caproto.threading.client.Subscription.add_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_callback()</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -992,7 +992,7 @@ come in.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">results</span></code> dictionary will be populated as responses come in.</p>
 <dl class="method">
 <dt id="caproto.threading.client.Batch.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>pv</em>, <em>callback</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Batch.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Batch.read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>self</em>, <em>pv</em>, <em>callback</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Batch.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Batch.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Request a fresh reading as part of a batched request.</p>
 <p>Notice that, unlike <a class="reference internal" href="#caproto.threading.client.PV.read" title="caproto.threading.client.PV.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">PV.read()</span></code></a>, the callback is required. (There
 is no other way to get the result back from a batched read.)</p>
@@ -1023,7 +1023,7 @@ count.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.Batch.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>pv</em>, <em>data</em>, <em>callback=None</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Batch.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Batch.write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write</code><span class="sig-paren">(</span><em>self</em>, <em>pv</em>, <em>data</em>, <em>callback=None</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#Batch.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.Batch.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a new value as part of a batched request.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1065,7 +1065,7 @@ internally by the Context. Its methods may be touched by user code, but
 this is rarely necessary.</p>
 <dl class="method">
 <dt id="caproto.threading.client.VirtualCircuitManager.events_off">
-<code class="descname">events_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#VirtualCircuitManager.events_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.VirtualCircuitManager.events_off" title="Permalink to this definition">¶</a></dt>
+<code class="descname">events_off</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#VirtualCircuitManager.events_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.VirtualCircuitManager.events_off" title="Permalink to this definition">¶</a></dt>
 <dd><p>Suspend updates to all subscriptions on this circuit.</p>
 <p>This may be useful if the server produces updates faster than the
 client can processs them.</p>
@@ -1073,13 +1073,13 @@ client can processs them.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.VirtualCircuitManager.events_on">
-<code class="descname">events_on</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#VirtualCircuitManager.events_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.VirtualCircuitManager.events_on" title="Permalink to this definition">¶</a></dt>
+<code class="descname">events_on</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#VirtualCircuitManager.events_on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.VirtualCircuitManager.events_on" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reactive updates to all subscriptions on this circuit.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.threading.client.VirtualCircuitManager.received">
-<code class="descname">received</code><span class="sig-paren">(</span><em>bytes_recv</em>, <em>address</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#VirtualCircuitManager.received"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.VirtualCircuitManager.received" title="Permalink to this definition">¶</a></dt>
+<code class="descname">received</code><span class="sig-paren">(</span><em>self</em>, <em>bytes_recv</em>, <em>address</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#VirtualCircuitManager.received"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.VirtualCircuitManager.received" title="Permalink to this definition">¶</a></dt>
 <dd><p>Receive and process and next command from the virtual circuit.</p>
 <p>This will be run on the recv thread</p>
 </dd></dl>
@@ -1091,7 +1091,7 @@ client can processs them.</p>
 <em class="property">class </em><code class="descclassname">caproto.threading.client.</code><code class="descname">SharedBroadcaster</code><span class="sig-paren">(</span><em>*</em>, <em>registration_retry_time=10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.cancel">
-<code class="descname">cancel</code><span class="sig-paren">(</span><em>*names</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.cancel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cancel</code><span class="sig-paren">(</span><em>self</em>, <em>*names</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.cancel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cancel searches for these names.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1114,19 +1114,19 @@ client can processs them.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.get_cached_search_result">
-<code class="descname">get_cached_search_result</code><span class="sig-paren">(</span><em>name</em>, <em>*</em>, <em>threshold=10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.get_cached_search_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.get_cached_search_result" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_cached_search_result</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>*</em>, <em>threshold=10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.get_cached_search_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.get_cached_search_result" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns address if found, raises KeyError if missing or stale.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.received">
-<code class="descname">received</code><span class="sig-paren">(</span><em>bytes_recv</em>, <em>address</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.received"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.received" title="Permalink to this definition">¶</a></dt>
+<code class="descname">received</code><span class="sig-paren">(</span><em>self</em>, <em>bytes_recv</em>, <em>address</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.received"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.received" title="Permalink to this definition">¶</a></dt>
 <dd><p>Receive and process and next command broadcasted over UDP.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>results_queue</em>, <em>names</em>, <em>*</em>, <em>timeout=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.search" title="Permalink to this definition">¶</a></dt>
+<code class="descname">search</code><span class="sig-paren">(</span><em>self</em>, <em>results_queue</em>, <em>names</em>, <em>*</em>, <em>timeout=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for PV names.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">results_queue</span></code> will receive <code class="docutils literal notranslate"><span class="pre">(address,</span> <span class="pre">names)</span></code> (the address of
 a server and a list of name(s) that it has) when results are received.</p>
@@ -1140,7 +1140,7 @@ the <code class="docutils literal notranslate"><span class="pre">results_queue</
 
 <dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.search_now">
-<code class="descname">search_now</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.search_now"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.search_now" title="Permalink to this definition">¶</a></dt>
+<code class="descname">search_now</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.search_now"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.search_now" title="Permalink to this definition">¶</a></dt>
 <dd><p>Force the Broadcaster to reissue all unanswered search requests now.</p>
 <p>Left to its own devices, the Broadcaster will do this at regular
 intervals automatically. This method is intended primarily for
@@ -1149,13 +1149,13 @@ debugging and should not be needed in normal use.</p>
 
 <dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.send">
-<code class="descname">send</code><span class="sig-paren">(</span><em>port</em>, <em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.send" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send</code><span class="sig-paren">(</span><em>self</em>, <em>port</em>, <em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process a command and transport it over the UDP socket.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.threading.client.SharedBroadcaster.time_since_last_heard">
-<code class="descname">time_since_last_heard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.time_since_last_heard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.time_since_last_heard" title="Permalink to this definition">¶</a></dt>
+<code class="descname">time_since_last_heard</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/threading/client.html#SharedBroadcaster.time_since_last_heard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.threading.client.SharedBroadcaster.time_since_last_heard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map each known server address to seconds since its last message.</p>
 <p>The time is reset to 0 whenever we receive a TCP message related to
 user activity <em>or</em> a Beacon. Servers are expected to send Beacons at

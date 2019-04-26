@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Core API Documentation &mdash; caproto 0.3.3+18.g60327cd documentation</title>
+  <title>Core API Documentation &mdash; caproto 0.3.3+20.g6522f64 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.3.3+18.g60327cd
+                0.3.3+20.g6522f64
               </div>
             
           
@@ -1112,7 +1112,7 @@ load. Lowest priority is 0; highest is 99.</p>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.send">
-<code class="descname">send</code><span class="sig-paren">(</span><em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.send" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send</code><span class="sig-paren">(</span><em>self</em>, <em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert one or more high-level Commands into buffers of bytes that may
 be broadcast together in one TCP packet. Update our internal
 state machine.</p>
@@ -1140,7 +1140,7 @@ state machine.</p>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.recv">
-<code class="descname">recv</code><span class="sig-paren">(</span><em>*buffers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.recv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.recv" title="Permalink to this definition">¶</a></dt>
+<code class="descname">recv</code><span class="sig-paren">(</span><em>self</em>, <em>*buffers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.recv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.recv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse commands from buffers received over TCP.</p>
 <p>When the caller is ready to process the commands, each command should
 first be passed to <a class="reference internal" href="#caproto.VirtualCircuit.process_command" title="caproto.VirtualCircuit.process_command"><code class="xref py py-meth docutils literal notranslate"><span class="pre">VirtualCircuit.process_command()</span></code></a> to validate
@@ -1157,7 +1157,7 @@ it against the protocol and update the VirtualCircuit’s state.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>``(commands, num_bytes_needed)``</strong></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">(commands,</span> <span class="pre">num_bytes_needed)</span></code></dt>
 <dd></dd>
 </dl>
 </td>
@@ -1168,7 +1168,7 @@ it against the protocol and update the VirtualCircuit’s state.</p>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.process_command">
-<code class="descname">process_command</code><span class="sig-paren">(</span><em>command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.process_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.process_command" title="Permalink to this definition">¶</a></dt>
+<code class="descname">process_command</code><span class="sig-paren">(</span><em>self</em>, <em>command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.process_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.process_command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update internal state machine and raise if protocol is violated.</p>
 <p>Received commands should be passed through here before any additional
 processing by a server or client layer.</p>
@@ -1176,27 +1176,27 @@ processing by a server or client layer.</p>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.disconnect">
-<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.disconnect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disconnect</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.disconnect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Notify all channels on this circuit that they are disconnected.</p>
 <p>Clients should call this method when a TCP connection is lost.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.new_channel_id">
-<code class="descname">new_channel_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.new_channel_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.new_channel_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_channel_id</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.new_channel_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.new_channel_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a valid value for a cid or sid.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.new_subscriptionid">
-<code class="descname">new_subscriptionid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.new_subscriptionid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.new_subscriptionid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_subscriptionid</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.new_subscriptionid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.new_subscriptionid" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is used by the convenience methods to obtain an unused integer ID.
 It does not update any important state.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="caproto.VirtualCircuit.new_ioid">
-<code class="descname">new_ioid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.new_ioid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.new_ioid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_ioid</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#VirtualCircuit.new_ioid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.VirtualCircuit.new_ioid" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is used by the convenience methods to obtain an unused integer ID.
 It does not update any important state.</p>
 </dd></dl>
@@ -1243,7 +1243,7 @@ implementation. All data received over the socket should be passed to
 
 <dl class="method">
 <dt id="caproto.Broadcaster.send">
-<code class="descname">send</code><span class="sig-paren">(</span><em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.send" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send</code><span class="sig-paren">(</span><em>self</em>, <em>*commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert one or more high-level Commands into bytes that may be
 broadcast together in one UDP datagram. Update our internal
 state machine.</p>
@@ -1271,7 +1271,7 @@ state machine.</p>
 
 <dl class="method">
 <dt id="caproto.Broadcaster.recv">
-<code class="descname">recv</code><span class="sig-paren">(</span><em>byteslike</em>, <em>address</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.recv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.recv" title="Permalink to this definition">¶</a></dt>
+<code class="descname">recv</code><span class="sig-paren">(</span><em>self</em>, <em>byteslike</em>, <em>address</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.recv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.recv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse commands from a UDP datagram.</p>
 <p>When the caller is ready to process the commands, each command should
 first be passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">Broadcaster.process_command()</span></code> to validate it
@@ -1301,7 +1301,7 @@ against the protocol and update the Broadcaster’s state.</p>
 
 <dl class="method">
 <dt id="caproto.Broadcaster.process_commands">
-<code class="descname">process_commands</code><span class="sig-paren">(</span><em>commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.process_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.process_commands" title="Permalink to this definition">¶</a></dt>
+<code class="descname">process_commands</code><span class="sig-paren">(</span><em>self</em>, <em>commands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.process_commands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.process_commands" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update internal state machine and raise if protocol is violated.</p>
 <p>Received commands should be passed through here before any additional
 processing by a server or client layer.</p>
@@ -1309,12 +1309,12 @@ processing by a server or client layer.</p>
 
 <dl class="method">
 <dt id="caproto.Broadcaster.new_search_id">
-<code class="descname">new_search_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.new_search_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.new_search_id" title="Permalink to this definition">¶</a></dt>
+<code class="descname">new_search_id</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.new_search_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.new_search_id" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="caproto.Broadcaster.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>name</em>, <em>*</em>, <em>cid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.search" title="Permalink to this definition">¶</a></dt>
+<code class="descname">search</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>*</em>, <em>cid=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.VersionRequest" title="caproto.VersionRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">VersionRequest</span></code></a> and <a class="reference internal" href="#caproto.SearchRequest" title="caproto.SearchRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">SearchRequest</span></code></a>.</p>
 <p>The protocol requires that these be transmitted together as part of one
 datagram.</p>
@@ -1330,7 +1330,7 @@ datagram.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>(VersionRequest, SearchRequest)</strong></dt>
+<dt>(VersionRequest, SearchRequest)</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1341,7 +1341,7 @@ datagram.</p>
 
 <dl class="method">
 <dt id="caproto.Broadcaster.register">
-<code class="descname">register</code><span class="sig-paren">(</span><em>ip='0.0.0.0'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.register" title="Permalink to this definition">¶</a></dt>
+<code class="descname">register</code><span class="sig-paren">(</span><em>self</em>, <em>ip='0.0.0.0'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_broadcaster.html#Broadcaster.register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.Broadcaster.register" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.RepeaterRegisterRequest" title="caproto.RepeaterRegisterRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepeaterRegisterRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1357,7 +1357,7 @@ packet.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>RepeaterRegisterRequest</strong></dt>
+<dt>RepeaterRegisterRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1411,7 +1411,7 @@ environment variable.</p>
 </table>
 <dl class="method">
 <dt id="caproto.ClientChannel.version">
-<code class="descname">version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.version" title="Permalink to this definition">¶</a></dt>
+<code class="descname">version</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.VersionRequest" title="caproto.VersionRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">VersionRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1426,7 +1426,7 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>VersionRequest</strong></dt>
+<dt>VersionRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1437,7 +1437,7 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 
 <dl class="method">
 <dt id="caproto.ClientChannel.host_name">
-<code class="descname">host_name</code><span class="sig-paren">(</span><em>host_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.host_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.host_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">host_name</code><span class="sig-paren">(</span><em>self</em>, <em>host_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.host_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.host_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.HostNameRequest" title="caproto.HostNameRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">HostNameRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1450,7 +1450,7 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>HostNameRequest</strong></dt>
+<dt>HostNameRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1461,7 +1461,7 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 
 <dl class="method">
 <dt id="caproto.ClientChannel.client_name">
-<code class="descname">client_name</code><span class="sig-paren">(</span><em>client_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.client_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.client_name" title="Permalink to this definition">¶</a></dt>
+<code class="descname">client_name</code><span class="sig-paren">(</span><em>self</em>, <em>client_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.client_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.client_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.ClientNameRequest" title="caproto.ClientNameRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClientNameRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1475,7 +1475,7 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ClientNameRequest</strong></dt>
+<dt>ClientNameRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1486,14 +1486,14 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 
 <dl class="method">
 <dt id="caproto.ClientChannel.create">
-<code class="descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.create" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <code class="xref py py-class docutils literal notranslate"><span class="pre">CreateChanRequest</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>CreateChanRequest</strong></dt>
+<dt>CreateChanRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1504,7 +1504,7 @@ load. Lowest priority is 0; highest is 99. Default is 0.</p>
 
 <dl class="method">
 <dt id="caproto.ClientChannel.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>data_type=None</em>, <em>data_count=None</em>, <em>ioid=None</em>, <em>notify=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>self</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>ioid=None</em>, <em>notify=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.ReadRequest" title="caproto.ReadRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadRequest</span></code></a> or <a class="reference internal" href="#caproto.ReadNotifyRequest" title="caproto.ReadNotifyRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadNotifyRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1533,7 +1533,7 @@ Channel Access in 3.13 and is not well-supported by caproto.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ReadNotifyRequest</strong></dt>
+<dt>ReadNotifyRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1544,7 +1544,7 @@ Channel Access in 3.13 and is not well-supported by caproto.</p>
 
 <dl class="method">
 <dt id="caproto.ClientChannel.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>data</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>metadata=None</em>, <em>ioid=None</em>, <em>notify=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write</code><span class="sig-paren">(</span><em>self</em>, <em>data</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>metadata=None</em>, <em>ioid=None</em>, <em>notify=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <code class="xref py py-class docutils literal notranslate"><span class="pre">WriteRequest</span> <span class="pre">or</span> <span class="pre">`:class:`WriteNotifyRequest</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1577,7 +1577,7 @@ a <code class="docutils literal notranslate"><span class="pre">WriteRequest</spa
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>WriteNotifyRequest</strong></dt>
+<dt>WriteNotifyRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1588,7 +1588,7 @@ a <code class="docutils literal notranslate"><span class="pre">WriteRequest</spa
 
 <dl class="method">
 <dt id="caproto.ClientChannel.subscribe">
-<code class="descname">subscribe</code><span class="sig-paren">(</span><em>data_type=None</em>, <em>data_count=None</em>, <em>subscriptionid=None</em>, <em>low=0.0</em>, <em>high=0.0</em>, <em>to=0.0</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.subscribe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">subscribe</code><span class="sig-paren">(</span><em>self</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>subscriptionid=None</em>, <em>low=0.0</em>, <em>high=0.0</em>, <em>to=0.0</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.subscribe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.EventAddRequest" title="caproto.EventAddRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventAddRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1626,7 +1626,7 @@ count, which can be checked in the Channel’s attribute
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>EventAddRequest</strong></dt>
+<dt>EventAddRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1637,7 +1637,7 @@ count, which can be checked in the Channel’s attribute
 
 <dl class="method">
 <dt id="caproto.ClientChannel.unsubscribe">
-<code class="descname">unsubscribe</code><span class="sig-paren">(</span><em>subscriptionid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unsubscribe</code><span class="sig-paren">(</span><em>self</em>, <em>subscriptionid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.unsubscribe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.EventAddRequest" title="caproto.EventAddRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventAddRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1652,7 +1652,7 @@ corresponding <a class="reference internal" href="#caproto.EventAddRequest" titl
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>EventAddRequest</strong></dt>
+<dt>EventAddRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1663,14 +1663,14 @@ corresponding <a class="reference internal" href="#caproto.EventAddRequest" titl
 
 <dl class="method">
 <dt id="caproto.ClientChannel.clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ClientChannel.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ClientChannel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.ClearChannelRequest" title="caproto.ClearChannelRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClearChannelRequest</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ClearChannelRequest</strong></dt>
+<dt>ClearChannelRequest</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1708,14 +1708,14 @@ environment variable.</p>
 </table>
 <dl class="method">
 <dt id="caproto.ServerChannel.version">
-<code class="descname">version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.version" title="Permalink to this definition">¶</a></dt>
+<code class="descname">version</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.VersionResponse" title="caproto.VersionResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">VersionResponse</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>VersionResponse</strong></dt>
+<dt>VersionResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1726,7 +1726,7 @@ environment variable.</p>
 
 <dl class="method">
 <dt id="caproto.ServerChannel.create">
-<code class="descname">create</code><span class="sig-paren">(</span><em>native_data_type</em>, <em>native_data_count</em>, <em>sid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.create" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create</code><span class="sig-paren">(</span><em>self</em>, <em>native_data_type</em>, <em>native_data_count</em>, <em>sid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <code class="xref py py-class docutils literal notranslate"><span class="pre">CreateChanResponse</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1746,7 +1746,7 @@ environment variable.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>CreateChanResponse</strong></dt>
+<dt>CreateChanResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1757,14 +1757,14 @@ environment variable.</p>
 
 <dl class="method">
 <dt id="caproto.ServerChannel.create_fail">
-<code class="descname">create_fail</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.create_fail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.create_fail" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_fail</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.create_fail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.create_fail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.CreateChFailResponse" title="caproto.CreateChFailResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">CreateChFailResponse</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>CreateChFailResponse</strong></dt>
+<dt>CreateChFailResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1775,7 +1775,7 @@ environment variable.</p>
 
 <dl class="method">
 <dt id="caproto.ServerChannel.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>data</em>, <em>ioid</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>status=1</em>, <em>*</em>, <em>metadata=None</em>, <em>notify=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.read" title="Permalink to this definition">¶</a></dt>
+<code class="descname">read</code><span class="sig-paren">(</span><em>self</em>, <em>data</em>, <em>ioid</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>status=1</em>, <em>*</em>, <em>metadata=None</em>, <em>notify=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.ReadResponse" title="caproto.ReadResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadResponse</span></code></a> or <a class="reference internal" href="#caproto.ReadNotifyResponse" title="caproto.ReadNotifyResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadNotifyResponse</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1811,7 +1811,7 @@ Channel Access in 3.13 and is not well-supported by caproto.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ReadResponse or ReadNotifyResponse</strong></dt>
+<dt>ReadResponse or ReadNotifyResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1822,7 +1822,7 @@ Channel Access in 3.13 and is not well-supported by caproto.</p>
 
 <dl class="method">
 <dt id="caproto.ServerChannel.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>ioid</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>status=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.write" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write</code><span class="sig-paren">(</span><em>self</em>, <em>ioid</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>status=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.WriteNotifyResponse" title="caproto.WriteNotifyResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">WriteNotifyResponse</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1848,7 +1848,7 @@ count, which can be checked in the Channel’s attribute
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>WriteNotifyResponse</strong></dt>
+<dt>WriteNotifyResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1859,7 +1859,7 @@ count, which can be checked in the Channel’s attribute
 
 <dl class="method">
 <dt id="caproto.ServerChannel.subscribe">
-<code class="descname">subscribe</code><span class="sig-paren">(</span><em>data</em>, <em>subscriptionid</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>status=&lt;CAStatus.ECA_NEWCONN: CAStatusCode(name='ECA_NEWCONN'</em>, <em>code=32</em>, <em>code_with_severity=259</em>, <em>severity=&lt;CASeverity.INFO: 3&gt;</em>, <em>success=1</em>, <em>defunct=True</em>, <em>description='New or resumed network connection')&gt;</em>, <em>metadata=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.subscribe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">subscribe</code><span class="sig-paren">(</span><em>self</em>, <em>data</em>, <em>subscriptionid</em>, <em>data_type=None</em>, <em>data_count=None</em>, <em>status=&lt;CAStatus.ECA_NEWCONN: CAStatusCode(name='ECA_NEWCONN'</em>, <em>code=32</em>, <em>code_with_severity=259</em>, <em>severity=&lt;CASeverity.INFO: 3&gt;</em>, <em>success=1</em>, <em>defunct=True</em>, <em>description='New or resumed network connection')&gt;</em>, <em>metadata=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.subscribe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.EventAddResponse" title="caproto.EventAddResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventAddResponse</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1890,7 +1890,7 @@ count, which can be checked in the Channel’s attribute
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>EventAddResponse</strong></dt>
+<dt>EventAddResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1901,7 +1901,7 @@ count, which can be checked in the Channel’s attribute
 
 <dl class="method">
 <dt id="caproto.ServerChannel.unsubscribe">
-<code class="descname">unsubscribe</code><span class="sig-paren">(</span><em>subscriptionid</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.unsubscribe" title="Permalink to this definition">¶</a></dt>
+<code class="descname">unsubscribe</code><span class="sig-paren">(</span><em>self</em>, <em>subscriptionid</em>, <em>data_type=None</em>, <em>data_count=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.unsubscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.unsubscribe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.EventCancelResponse" title="caproto.EventCancelResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventCancelResponse</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1919,7 +1919,7 @@ native data type, which can be checked in the Channel’s attribute
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>EventCancelResponse</strong></dt>
+<dt>EventCancelResponse</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1930,14 +1930,14 @@ native data type, which can be checked in the Channel’s attribute
 
 <dl class="method">
 <dt id="caproto.ServerChannel.clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.clear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clear</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.ClearChannelResponse" title="caproto.ClearChannelResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClearChannelResponse</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ClearChannelResposne</strong></dt>
+<dt>ClearChannelResposne</dt>
 <dd></dd>
 </dl>
 </td>
@@ -1948,14 +1948,14 @@ native data type, which can be checked in the Channel’s attribute
 
 <dl class="method">
 <dt id="caproto.ServerChannel.disconnect">
-<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.disconnect" title="Permalink to this definition">¶</a></dt>
+<code class="descname">disconnect</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/caproto/_circuit.html#ServerChannel.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#caproto.ServerChannel.disconnect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a valid <a class="reference internal" href="#caproto.ServerDisconnResponse" title="caproto.ServerDisconnResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerDisconnResponse</span></code></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>ServerDisconnResponse</strong></dt>
+<dt>ServerDisconnResponse</dt>
 <dd></dd>
 </dl>
 </td>
