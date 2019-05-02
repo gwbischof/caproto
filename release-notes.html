@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Release History &mdash; caproto 0.3.3+20.g6522f64 documentation</title>
+  <title>Release History &mdash; caproto 0.3.3+22.g7999f75 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.3.3+20.g6522f64
+                0.3.3+22.g7999f75
               </div>
             
           
@@ -110,13 +110,17 @@
 <li class="toctree-l1"><a class="reference internal" href="protocol-compliance.html">Details of our Protocol Compliance for CA Nerds</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Release History</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#v0-3-3-2019-04-11">v0.3.3 (2019-04-11)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-3-4-2019-05-02">v0.3.4 (2019-05-02)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fixes">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-3-3-2019-04-11">v0.3.3 (2019-04-11)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Fixes</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-2-2019-03-06">v0.3.2 (2019-03-06)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2019-03-05">v0.3.1 (2019-03-05)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Fixes</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-0-2019-02-20">v0.3.0 (2019-02-20)</a><ul>
@@ -126,7 +130,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-3-2019-01-02">v0.2.3 (2019-01-02)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#usability-improvements">Usability Improvements</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#updated-pyepics-compatibility">Updated Pyepics Compatibility</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deprecations">Deprecations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#internal-changes">Internal Changes</a></li>
@@ -139,14 +143,14 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-1-2018-10-29">v0.2.1 (2018-10-29)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#server-performance-tuning">Server Performance Tuning</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-0-2018-10-17">v0.2.0 (2018-10-17)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Features</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#breaking-changes">Breaking Changes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Bug Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Bug Fixes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#improved-protocol-compliance">Improved Protocol Compliance</a></li>
 </ul>
 </li>
@@ -221,13 +225,25 @@
             
   <div class="section" id="release-history">
 <h1>Release History<a class="headerlink" href="#release-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v0-3-4-2019-05-02">
+<h2>v0.3.4 (2019-05-02)<a class="headerlink" href="#v0-3-4-2019-05-02" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Several fixes and documentation for the commandline utilities’ formatting
+parameters added in v0.3.3.</li>
+<li>Put an upper limit on how quickly a given search result may be reissued.</li>
+<li>Documentation fix in server help string.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="v0-3-3-2019-04-11">
 <h2>v0.3.3 (2019-04-11)<a class="headerlink" href="#v0-3-3-2019-04-11" title="Permalink to this headline">¶</a></h2>
 <p>This release improves the commandline utilities’ parity to their counterparts
 in the reference implementation by supporting formatting parameters for
 integers and floats. It also includes some important fixes.</p>
-<div class="section" id="fixes">
-<h3>Fixes<a class="headerlink" href="#fixes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Fixes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>When optional dependency <code class="docutils literal notranslate"><span class="pre">netifaces</span></code> is installed, clients search on all
 broadcast interfaces, not just <code class="docutils literal notranslate"><span class="pre">255.255.255.255</span></code>. This reverts an erroneous
@@ -247,8 +263,8 @@ that is not Channel Access messages).</p>
 <h2>v0.3.1 (2019-03-05)<a class="headerlink" href="#v0-3-1-2019-03-05" title="Permalink to this headline">¶</a></h2>
 <p>This is a bug-fix release addressing issues related to empty (zero-length)
 channel data.</p>
-<div class="section" id="id1">
-<h3>Fixes<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Fixes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix servers’ support for empty (zero-length) data.</li>
 <li>Assume the <em>maximum</em> length of a channel initialized with empty data is one
@@ -322,8 +338,8 @@ v0.2.1, batched requests and their responses were not logged, and write
 responses were not logged when <code class="docutils literal notranslate"><span class="pre">notify=True</span></code> but <code class="docutils literal notranslate"><span class="pre">wait=False</span></code>.)</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h3>Bug Fixes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h3>Bug Fixes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Fix critical bug in synchronous client that broke monitoring of multiple PVs.</li>
 <li>Fix default (“AUTO”) broadcast address list (should always be
@@ -424,8 +440,8 @@ been improved.</p>
 bugs in the server identified via
 <a class="reference external" href="https://epics.anl.gov/base/R3-16/2-docs/CAref.html#acctst">acctst</a>,
 the server acceptance test that ships with <code class="docutils literal notranslate"><span class="pre">epics-base</span></code>.</p>
-<div class="section" id="id3">
-<h3>Bug Fixes<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h3>Bug Fixes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>When a new Subscription is added, send the most recent value immediately but
 only to the <em>new</em> Subscription. Previous releases sent redundant messages
@@ -474,8 +490,8 @@ Related — there is expanded documentation on <a class="reference internal" hre
 <h2>v0.2.0 (2018-10-17)<a class="headerlink" href="#v0-2-0-2018-10-17" title="Permalink to this headline">¶</a></h2>
 <p>This release improves compliance with the protocol and server performance under
 high load.</p>
-<div class="section" id="id4">
-<h3>Features<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Features<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Under high load (with many subscription updates queued up to send) servers
 batch subscriptions into blocks, trading a little latency for efficiency.
@@ -520,8 +536,8 @@ instead of a length-1 list (API break), while <code class="docutils literal notr
 or scalar.</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>Bug Fixes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Bug Fixes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>A critical bug CHAR-type payload serialization which made caproto clients
 unusable with CHAR-type channels has been fixed.</li>
